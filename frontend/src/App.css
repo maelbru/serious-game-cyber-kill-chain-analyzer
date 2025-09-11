@@ -309,8 +309,10 @@ body {
   font-size: 42px;
   font-weight: 700;
   background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
   margin-top: 15px;
 }
 
@@ -1383,8 +1385,10 @@ body {
   font-size: 36px;
   font-weight: 700;
   background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent;
   margin-bottom: 10px;
 }
 
