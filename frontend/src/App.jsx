@@ -260,8 +260,12 @@ function App() {
       }
 
       // Ricalcola accuracy
-      const newAccuracy = Math.round(((correctAttempts + (response.data.is_correct ? 1 : 0)) / (totalAttempts + 1)) * 100)
-      setAccuracy(newAccuracy)
+      setTotalAttempts(prev => {
+        const newTotal = prev + 1
+        const newCorrect = correctAttempts + (response.data.is_correct ? 1 : 0)
+        setAccuracy(Math.round((newCorrect / newTotal) * 100))
+        return newTotal
+      })
 
       // Check level up
       if (score + points >= level * 100) {
@@ -330,24 +334,23 @@ function App() {
   // ========================================
 
   useEffect(() => {
-    if (isTimerActive && timeRemaining > 0) {
-      timerRef.current = setTimeout(() => {
+    let timeoutId = null
+
+    if (isTimerActive && timeRemaining > 0 && gameState === 'playing') {
+      timeoutId = setTimeout(() => {
         setTimeRemaining(prev => prev - 1)
       }, 1000)
-    } else if (timeRemaining === 0 && isTimerActive) {
+    } else if (timeRemaining === 0 && isTimerActive && selectedPhase) {
       setIsTimerActive(false)
-      if (gameState === 'playing') {
-        validatePhase()
-      }
+      validatePhase()
     }
 
     return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current)
-        timerRef.current = null
+      if (timeoutId) {
+        clearTimeout(timeoutId)
       }
     }
-  }, [timeRemaining, isTimerActive, gameState])
+  }, [timeRemaining, isTimerActive, gameState, selectedPhase])
 
   // ========================================
   // RENDERING UI
