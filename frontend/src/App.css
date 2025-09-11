@@ -717,7 +717,6 @@ body {
 }
 
 .phase-card:hover:not(.disabled) {
-  transform: translateX(8px);
   border-color: var(--phase-color, var(--primary-blue));
   box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
 }
