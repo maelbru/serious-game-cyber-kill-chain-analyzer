@@ -1040,7 +1040,7 @@ function App() {
             onClick={validatePhase}
             disabled={!selectedPhase || isLoading}
           >
-            {isLoading ? 'Validazione...' : 'Conferma Fase'}
+            {isLoading ? 'Validazione...' : 'Procedi'}
           </button>
         </div>
       </div>
