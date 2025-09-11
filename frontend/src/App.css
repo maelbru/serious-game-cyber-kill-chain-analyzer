@@ -130,6 +130,20 @@ body {
   }
 }
 
+@keyframes timeout-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+  }
+
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+  }
+}
+
 /* ============================================
    ERROR BANNER (NUOVO)
    ============================================ */
@@ -588,6 +602,71 @@ body {
   border-color: var(--primary-red);
   color: var(--primary-red);
   animation: pulse 0.5s infinite;
+}
+
+/* Tempo scaduto */
+
+/* Messaggio specifico per timeout */
+.timeout-message {
+  background: rgba(245, 158, 11, 0.1);
+  border-left: 3px solid var(--primary-orange);
+  border-radius: 6px;
+  padding: 15px;
+  margin: 15px 0;
+  text-align: left;
+}
+
+.timeout-message p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Consigli per timeout */
+.timeout-tips {
+  background: rgba(30, 41, 59, 0.4);
+  border-left: 3px solid var(--primary-cyan);
+  border-radius: 6px;
+  padding: 15px;
+  margin: 15px 0;
+  text-align: left;
+}
+
+.timeout-tips h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timeout-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.timeout-tips li {
+  padding: 6px 0;
+  padding-left: 18px;
+  position: relative;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.timeout-tips li::before {
+  content: '💡';
+  position: absolute;
+  left: 0;
+  font-size: 10px;
+}
+
+.timeout-message p {
+  font-size: 13px;
 }
 
 /* Log Card - Scrollabile CORRETTO */
@@ -1082,6 +1161,7 @@ body {
 .feedback-icon.warning {
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.2));
   color: var(--primary-orange);
+  animation: pulse 2s infinite;
 }
 
 .feedback-title {

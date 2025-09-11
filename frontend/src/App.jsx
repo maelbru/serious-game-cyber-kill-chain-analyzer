@@ -187,7 +187,7 @@ function App() {
   // Funzione per validare la risposta del server
   const validateApiResponse = (data, requiredFields = []) => {
     if (!data || typeof data !== 'object') return false
-    
+
     return requiredFields.every(field => {
       const keys = field.split('.')
       let current = data
@@ -202,11 +202,11 @@ function App() {
   // Funzione per gestire errori API
   const handleApiError = (error, fallbackAction = null) => {
     console.error('API Error:', error)
-    
+
     if (error.code === 'ECONNREFUSED' || error.message?.includes('Network Error')) {
       setIsBackendAvailable(false)
       setError('Backend non disponibile. Usando modalità offline.')
-      
+
       if (fallbackAction) {
         setTimeout(fallbackAction, 1000)
       }
@@ -324,7 +324,7 @@ function App() {
       } else {
         // Modalità offline - simulazione semplice
         const isCorrect = Math.random() > 0.3 // 70% di successo in modalità offline
-        
+
         if (isCorrect) {
           setMitigationStrategies(FALLBACK_MITIGATIONS)
           setFeedback({
@@ -409,7 +409,7 @@ function App() {
         // Modalità offline - simulazione
         const isCorrect = Math.random() > 0.4 // 60% successo
         const points = isCorrect ? 25 + Math.floor(timeRemaining * 0.5) : 5
-        
+
         handleMitigationResult({
           is_correct: isCorrect,
           points: points,
@@ -435,21 +435,21 @@ function App() {
   // Funzione helper per gestire risultato mitigazione
   const handleMitigationResult = (result) => {
     const points = result.points || 0
-    
+
     // Aggiorna statistiche in modo atomico
     setScore(prev => prev + points)
-    
+
     setTotalAttempts(prev => {
       const newTotal = prev + 1
       const newCorrect = result.is_correct ? correctAttempts + 1 : correctAttempts
-      
+
       if (result.is_correct) {
         setCorrectAttempts(newCorrect)
         setStreak(prev => prev + 1)
       } else {
         setStreak(0)
       }
-      
+
       setAccuracy(Math.round((newCorrect / newTotal) * 100))
       return newTotal
     })
@@ -523,16 +523,24 @@ function App() {
       }, 1000)
     } else if (timeRemaining === 0 && isTimerActive && gameState === 'playing') {
       setIsTimerActive(false)
-      if (selectedPhase) {
-        validatePhase()
-      } else {
-        setError('Tempo scaduto! Seleziona una fase prima che scada il tempo.')
-        setGameState('phase_feedback')
-        setFeedback({
-          type: 'timeout',
-          message: 'Tempo scaduto!'
-        })
-      }
+
+      // MODIFICA PRINCIPALE: Gestione specifica per timeout
+      setFeedback({
+        type: 'timeout',
+        title: 'Tempo Scaduto!',
+        message: 'Il tempo è scaduto prima che tu potessi selezionare una fase.',
+        explanation: 'Ricorda di analizzare rapidamente il log e identificare gli indicatori chiave per la fase della Cyber Kill Chain.',
+        showCorrectAnswer: false
+      })
+      setGameState('phase_feedback')
+
+      // Aggiorna statistiche per timeout
+      setStreak(0)
+      setTotalAttempts(prev => {
+        const newTotal = prev + 1
+        setAccuracy(Math.round((correctAttempts / newTotal) * 100))
+        return newTotal
+      })
     }
 
     return () => {
@@ -540,7 +548,7 @@ function App() {
         clearTimeout(timeoutId)
       }
     }
-  }, [timeRemaining, isTimerActive, gameState, selectedPhase, validatePhase])
+  }, [timeRemaining, isTimerActive, gameState, correctAttempts])
 
   // ========================================
   // CLEANUP EFFECT
@@ -615,8 +623,8 @@ function App() {
           </div>
 
           <div className="welcome-buttons">
-            <button 
-              className="btn-primary" 
+            <button
+              className="btn-primary"
               onClick={fetchNewLog}
               disabled={isLoading}
             >
@@ -701,22 +709,34 @@ function App() {
 
   // Resto del rendering identico all'originale...
   // (FEEDBACK FASE INCORRETTA, SELEZIONE MITIGAZIONE, FEEDBACK FINALE, SCHERMATA PRINCIPALE)
-  
-  // FEEDBACK FASE INCORRETTA
+
+  // FEEDBACK FASE INCORRETTA O TIMEOUT
   if (gameState === 'phase_feedback' && feedback) {
     return (
       <div className="modal-overlay">
         <ErrorBanner />
         <div className="feedback-modal">
-          <div className={`feedback-icon ${feedback.type === 'phase_correct' ? 'success' : 'error'}`}>
-            {feedback.type === 'phase_correct' ? '✓' : '✗'}
+          <div className={`feedback-icon ${feedback.type === 'timeout' ? 'warning' :
+              feedback.type === 'phase_correct' ? 'success' : 'error'
+            }`}>
+            {feedback.type === 'timeout' ? '⏰' :
+              feedback.type === 'phase_correct' ? '✓' : '✗'}
           </div>
 
           <h2 className="feedback-title">
-            {feedback.type === 'phase_correct' ? 'Risposta esatta!' : 'Risposta errata!'}
+            {feedback.type === 'timeout' ? 'Tempo Scaduto!' :
+              feedback.type === 'phase_correct' ? 'Fase Corretta!' : 'Fase Non Corretta'}
           </h2>
 
-          {feedback.correct_phase && (
+          {/* Messaggio specifico per timeout */}
+          {feedback.type === 'timeout' && (
+            <div className="timeout-message">
+              <p>{feedback.message}</p>
+            </div>
+          )}
+
+          {/* Mostra risposta corretta solo se NON è timeout E c'è una risposta corretta */}
+          {feedback.correct_phase && feedback.type !== 'timeout' && (
             <div className="correct-answer">
               <h3>La fase corretta era:</h3>
               <div className="phase-card highlighted">
@@ -729,12 +749,12 @@ function App() {
 
           {feedback.explanation && (
             <div className="explanation-box">
-              <h4>📚 Spiegazione:</h4>
+              <h4>📚 {feedback.type === 'timeout' ? 'Suggerimento:' : 'Spiegazione:'}</h4>
               <p>{feedback.explanation}</p>
             </div>
           )}
 
-          {feedback.indicators && feedback.indicators.length > 0 && (
+          {feedback.indicators && feedback.indicators.length > 0 && feedback.type !== 'timeout' && (
             <div className="indicators-box">
               <h4>🔍 Indicatori Chiave:</h4>
               <ul>
@@ -745,8 +765,21 @@ function App() {
             </div>
           )}
 
-          <button 
-            className="btn-primary" 
+          {/* Consigli specifici per timeout */}
+          {feedback.type === 'timeout' && (
+            <div className="timeout-tips">
+              <h4>💡 Consigli per il prossimo round:</h4>
+              <ul>
+                <li>Leggi rapidamente il log cercando parole chiave</li>
+                <li>Identifica la fonte (Network, Email, Endpoint, etc.)</li>
+                <li>Cerca indicatori di azione (scan, query, injection, etc.)</li>
+                <li>Non overthinking - fidati del primo istinto</li>
+              </ul>
+            </div>
+          )}
+
+          <button
+            className="btn-primary"
             onClick={fetchNewLog}
             disabled={isLoading}
           >
@@ -870,8 +903,8 @@ function App() {
             </div>
           </div>
 
-          <button 
-            className="btn-primary" 
+          <button
+            className="btn-primary"
             onClick={fetchNewLog}
             disabled={isLoading}
           >
@@ -886,7 +919,7 @@ function App() {
   return (
     <div className="game-container">
       <ErrorBanner />
-      
+
       <header className="game-header">
         <div className="logo-small">
           <span>🛡️</span>
@@ -974,7 +1007,7 @@ function App() {
 
           <div className="phases-container">
             {KILL_CHAIN_PHASES.map((phase, index) => {
-              const isDisabled = 
+              const isDisabled =
                 (difficulty === 'beginner' && index > 2) ||
                 (difficulty === 'intermediate' && index > 4) ||
                 isLoading
