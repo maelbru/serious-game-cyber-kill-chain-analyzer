@@ -78,9 +78,9 @@ LOGS_DATABASE = {
                 'targets': ['dc01.company.local', 'mail.company.local', 'vpn.company.local'],
                 'tool_signature': 'nmap/dnsrecon'
             },
-            'explanation': 'Multiple DNS queries for infrastructure components indicate reconnaissance phase where attackers map the network.',
+            'explanation': 'Query DNS multiple verso componenti dell’infrastruttura indicano la fase di ricognizione, in cui gli attaccanti mappano la rete.',
             'phase': 'reconnaissance',
-            'indicators': ['DNS enumeration', 'External scanning', 'Infrastructure mapping']
+            'indicators': ['Enumerazione DNS', 'Scansione esterna', 'Mappatura dell’infrastruttura']
         }
     ],
     'weaponization': [
@@ -96,9 +96,9 @@ LOGS_DATABASE = {
                 'macro_detected': True,
                 'payload_type': 'PowerShell downloader'
             },
-            'explanation': 'Malicious document with embedded macro represents weaponization phase where exploit is packaged with payload.',
+            'explanation': 'Documento malevolo con macro incorporata rappresenta la fase di weaponization, in cui l’exploit viene confezionato insieme al payload.',
             'phase': 'weaponization',
-            'indicators': ['Macro-enabled document', 'Obfuscated code', 'Download cradle']
+            'indicators': ['Documento con macro abilitate', 'Codice offuscato', 'Script di download']
         }
     ],
     'delivery': [
@@ -114,9 +114,9 @@ LOGS_DATABASE = {
                 'subject': 'Urgent: Update Your Password',
                 'malicious_url': 'hxxps://company-login[.]tk'
             },
-            'explanation': 'Mass phishing email campaign represents delivery phase where weapon reaches targets.',
+            'explanation': 'Una campagna di phishing di massa rappresenta la fase di delivery, in cui il payload raggiunge i bersagli.',
             'phase': 'delivery',
-            'indicators': ['Phishing emails', 'Spoofed sender', 'Credential harvesting']
+            'indicators': ['Email di phishing', 'Mittente contraffatto', 'Raccolta di credenziali']
         }
     ],
     'exploitation': [
@@ -132,9 +132,9 @@ LOGS_DATABASE = {
                 'technique': 'Process Injection',
                 'amsi_bypass': True
             },
-            'explanation': 'Malicious code execution from Word document indicates successful exploitation of vulnerability.',
+            'explanation': 'L’esecuzione di codice malevolo da un documento Word indica l’avvenuta exploitation di una vulnerabilità.',
             'phase': 'exploitation',
-            'indicators': ['Process injection', 'AMSI bypass', 'Shellcode execution']
+            'indicators': ['Iniezione di processo', 'Bypass di AMSI', 'Esecuzione di shellcode']
         }
     ],
     'installation': [
@@ -150,9 +150,9 @@ LOGS_DATABASE = {
                 'persistence_type': 'Service + Scheduled Task',
                 'certificate': 'Invalid'
             },
-            'explanation': 'Malware establishing persistence through services and scheduled tasks indicates installation phase.',
+            'explanation': 'Il malware che stabilisce persistenza tramite servizi e attività pianificate indica la fase di installation',
             'phase': 'installation',
-            'indicators': ['Service creation', 'Scheduled task', 'Persistence mechanism']
+            'indicators': ['Creazione di servizio', 'Attività pianificata', 'Meccanismo di persistenza']
         }
     ],
     'command_control': [
@@ -168,9 +168,9 @@ LOGS_DATABASE = {
                 'beacon_interval': '60 seconds',
                 'protocol': 'HTTPS'
             },
-            'explanation': 'Regular beaconing pattern to external server indicates established command and control channel.',
+            'explanation': 'Un pattern regolare di beaconing verso un server esterno indica l’avvenuta creazione di un canale di command and control.',
             'phase': 'command_control',
-            'indicators': ['Beaconing behavior', 'Regular intervals', 'External communication']
+            'indicators': ['Comportamento di beaconing', 'Intervalli regolari', 'Comunicazione esterna']
         }
     ],
     'actions_objectives': [
@@ -186,9 +186,9 @@ LOGS_DATABASE = {
                 'destination': 'Cloud storage',
                 'compression': True
             },
-            'explanation': 'Large-scale data theft indicates attacker achieving their objective of stealing sensitive information.',
+            'explanation': 'Il furto su larga scala di dati indica che l’attaccante ha raggiunto l’obiettivo di sottrarre informazioni sensibili.',
             'phase': 'actions_objectives',
-            'indicators': ['Data exfiltration', 'Sensitive files', 'Large volume']
+            'indicators': ['Esfiltrazione di dati', 'File sensibili', 'Grande volume di dati']
         }
     ]
 }
@@ -492,7 +492,7 @@ def get_log():
         
         # Tempo limite basato sulla difficoltà
         time_limits = {
-            'beginner': 90,
+            'beginner': 70,
             'intermediate': 60,
             'expert': 45
         }

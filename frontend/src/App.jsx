@@ -150,7 +150,7 @@ function App() {
 
   // Stati del round corrente
   const [currentLog, setCurrentLog] = useState(null)
-  const [timeRemaining, setTimeRemaining] = useState(90)
+  const [timeRemaining, setTimeRemaining] = useState(70)
   const [selectedPhase, setSelectedPhase] = useState(null)
   const [selectedMitigation, setSelectedMitigation] = useState(null)
   const [mitigationStrategies, setMitigationStrategies] = useState([])
@@ -247,7 +247,7 @@ function App() {
 
       if (validateApiResponse(response.data, ['log.id', 'log.raw', 'time_limit'])) {
         setCurrentLog(response.data.log)
-        setTimeRemaining(response.data.time_limit || 90)
+        setTimeRemaining(response.data.time_limit || 70)
         setIsTimerActive(true)
         setGameState('playing')
         setIsBackendAvailable(true)
@@ -264,7 +264,7 @@ function App() {
           ...fallbackLog,
           timestamp: new Date().toISOString()
         })
-        setTimeRemaining(90)
+        setTimeRemaining(70)
         setIsTimerActive(true)
         setGameState('playing')
       })
