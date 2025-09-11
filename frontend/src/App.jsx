@@ -150,7 +150,7 @@ function App() {
 
   // Stati del round corrente
   const [currentLog, setCurrentLog] = useState(null)
-  const [timeRemaining, setTimeRemaining] = useState(70)
+  const [timeRemaining, setTimeRemaining] = useState(60)
   const [selectedPhase, setSelectedPhase] = useState(null)
   const [selectedMitigation, setSelectedMitigation] = useState(null)
   const [mitigationStrategies, setMitigationStrategies] = useState([])
@@ -247,7 +247,7 @@ function App() {
 
       if (validateApiResponse(response.data, ['log.id', 'log.raw', 'time_limit'])) {
         setCurrentLog(response.data.log)
-        setTimeRemaining(response.data.time_limit || 70)
+        setTimeRemaining(response.data.time_limit || 60)
         setIsTimerActive(true)
         setGameState('playing')
         setIsBackendAvailable(true)
@@ -264,7 +264,7 @@ function App() {
           ...fallbackLog,
           timestamp: new Date().toISOString()
         })
-        setTimeRemaining(70)
+        setTimeRemaining(60)
         setIsTimerActive(true)
         setGameState('playing')
       })
@@ -955,7 +955,7 @@ function App() {
         {/* SEZIONE LOG */}
         <div className="log-section">
           <div className="section-header">
-            <h2>📋 Security Log Analysis</h2>
+            <h2>📋 Analisi dei log di sicurezza</h2>
             <div className={`timer ${timeRemaining <= 15 ? 'critical' : timeRemaining <= 30 ? 'warning' : ''}`}>
               ⏱️ {timeRemaining}s
             </div>
@@ -1002,7 +1002,7 @@ function App() {
         {/* SEZIONE KILL CHAIN */}
         <div className="killchain-section">
           <div className="section-header">
-            <h2>🎯 Identifica la Fase della Cyber Kill Chain</h2>
+            <h2>🎯 Individua la fase della Cyber Kill Chain</h2>
           </div>
 
           <div className="phases-container">

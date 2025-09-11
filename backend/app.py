@@ -492,9 +492,9 @@ def get_log():
         
         # Tempo limite basato sulla difficoltà
         time_limits = {
-            'beginner': 70,
-            'intermediate': 60,
-            'expert': 45
+            'beginner': 60,
+            'intermediate': 40,
+            'expert': 30
         }
         
         logger.info(f"Generated log {selected_log['id']} for session {session_id} at difficulty {difficulty}")
