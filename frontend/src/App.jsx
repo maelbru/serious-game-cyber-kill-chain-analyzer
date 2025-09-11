@@ -713,7 +713,7 @@ function App() {
           </div>
 
           <h2 className="feedback-title">
-            {feedback.type === 'phase_correct' ? 'Fase Corretta!' : 'Fase Non Corretta'}
+            {feedback.type === 'phase_correct' ? 'Risposta esatta!' : 'Risposta errata!'}
           </h2>
 
           {feedback.correct_phase && (
