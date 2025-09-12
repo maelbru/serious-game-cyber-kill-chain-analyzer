@@ -60,22 +60,6 @@ export function WelcomeScreen({
             </div>
           </div>
 
-          <div className="kill-chain-explanation">
-            <h2>Le 7 Fasi della Cyber Kill Chain:</h2>
-            <div className="phases-grid">
-              {KILL_CHAIN_PHASES.map((phase, index) => (
-                <div key={phase.id} className="phase-explanation">
-                  <div className="phase-header">
-                    <span className="phase-num">{index + 1}</span>
-                    <span className="phase-emoji">{phase.icon}</span>
-                    <span className="phase-title">{phase.name}</span>
-                  </div>
-                  <p className="phase-desc">{phase.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
           <button 
             className="btn-start-game" 
             onClick={() => setGameState(GAME_STATES.WELCOME)}
