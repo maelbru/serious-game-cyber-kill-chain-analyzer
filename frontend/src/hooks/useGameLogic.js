@@ -5,9 +5,9 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import axios from 'axios'
-import { 
-  API_URL, 
-  SESSION_ID, 
+import {
+  API_URL,
+  SESSION_ID,
   API_TIMEOUT,
   KILL_CHAIN_PHASES,
   FALLBACK_LOGS,
@@ -85,14 +85,22 @@ export function useGameLogic() {
 
   const handleApiError = (error, fallbackAction = null) => {
     console.error('API Error:', error)
-    if (error.code === 'ECONNREFUSED' || error.message?.includes('Network Error')) {
+
+    // GESTIONE DEGLI ERRORI
+    if (error.response?.status === 429) {
+      setError('⏰ Troppi tentativi! Riprova tra qualche minuto.')
       setIsBackendAvailable(false)
-      setError('Backend non disponibile. Usando modalità offline.')
+    } else if (error.response?.status === 400) {
+      const errorMsg = error.response.data?.error || 'Dati non validi forniti'
+      setError(`❌ ${errorMsg}`)
+    } else if (error.code === 'ECONNREFUSED' || error.message?.includes('Network Error')) {
+      setIsBackendAvailable(false)
+      setError('📡 Backend non disponibile. Usando modalità offline.')
       if (fallbackAction) {
         setTimeout(fallbackAction, 1000)
       }
     } else {
-      setError(error.response?.data?.error || error.message || 'Errore sconosciuto')
+      setError(`⚠️ ${error.response?.data?.error || error.message || 'Errore sconosciuto'}`)
     }
   }
 
@@ -421,7 +429,7 @@ export function useGameLogic() {
     setGameState,
     difficulty,
     isBackendAvailable,
-    
+
     // Player Stats
     score,
     streak,
@@ -430,7 +438,7 @@ export function useGameLogic() {
     totalAttempts,
     correctAttempts,
     achievements,
-    
+
     // Current Round
     currentLog,
     timeRemaining,
@@ -439,19 +447,19 @@ export function useGameLogic() {
     selectedMitigation,
     setSelectedMitigation,
     mitigationStrategies,
-    
+
     // UI State
     feedback,
     isLoading,
     error,
     setError,
     isTimerActive,
-    
+
     // Actions
     fetchNewLog,
     validatePhase,
     validateMitigation,
-    
+
     // Helpers
     phasesCompleted
   }

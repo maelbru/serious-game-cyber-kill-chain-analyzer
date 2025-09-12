@@ -7,9 +7,9 @@
 // CONFIGURAZIONE API
 // ============================================================================
 
-export const API_URL = 'http://localhost:5000/api'
+export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 export const SESSION_ID = 'user_' + Math.random().toString(36).substr(2, 9)
-export const API_TIMEOUT = 5000
+export const API_TIMEOUT = 10000  // Aumentato per rate limiting
 
 // ============================================================================
 // KILL CHAIN PHASES DATA
