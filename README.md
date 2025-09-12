@@ -1,506 +1,192 @@
 # 🛡️ Cyber Kill Chain Analyzer
 
-[![License: MIT](https://img.shields.io/badge/Licenza-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
-[![React](https://img.shields.io/badge/React-18.0%2B-61DAFB.svg)](https://reactjs.org/)
-[![Flask](https://img.shields.io/badge/Flask-3.0.0-000000.svg)](https://flask.palletsprojects.com/)
+Questo progetto è una webapp educativa basata su React e Flask che integra un sistema di gamification per imparare la **Cyber Kill Chain**.
 
-> Un serious game educativo per la formazione in cybersecurity attraverso il framework Cyber Kill Chain
+È progettato per analizzare log di sicurezza reali e identificare le fasi degli attacchi informatici, valutando automaticamente secondo le migliori pratiche di **cybersecurity**.
 
-## 📋 Indice
+## 🚀 Caratteristiche principali
 
-- [Informazioni](#informazioni)
-- [Caratteristiche](#caratteristiche)
-- [Demo](#demo)
-- [Guida Rapida](#guida-rapida)
-  - [Prerequisiti](#prerequisiti)
-  - [Installazione](#installazione)
-  - [Avvio Rapido](#avvio-rapido)
-- [Come Giocare](#come-giocare)
-- [Architettura](#architettura)
-- [Documentazione API](#documentazione-api)
-- [Sviluppo](#sviluppo)
-- [Testing](#testing)
-- [Deployment](#deployment)
-- [Dati di Ricerca](#dati-di-ricerca)
-- [Contribuire](#contribuire)
+- ✅ **Webapp in React** con interfaccia intuitiva e moderna
+- 🧠 **Backend Flask** con API RESTful per la gestione del gioco
+- 🎯 **Sistema di gamification** ottimizzato per l'apprendimento della cybersecurity
+- 📊 **Analisi log realistici** con feedback contestuale e coerente
+- ⚡ **Difficoltà dinamica** che si adatta alle performance dell'utente
+- 🏆 **Sistema di achievements** con progressione e statistiche dettagliate
+- 📱 **Design responsive** compatibile con tutti i dispositivi
+- 🔄 **Modalità offline** per funzionamento senza connessione backend
 
-## 🎯 Informazioni
-
-**Cyber Kill Chain Analyzer** è un serious game educativo progettato per la formazione e la ricerca in cybersecurity. I giocatori analizzano log di sicurezza reali per identificare le fasi di attacco secondo il framework Cyber Kill Chain di Lockheed Martin e selezionare strategie di mitigazione appropriate.
-
-### Contesto di Ricerca
-
-Questo progetto è stato sviluppato come parte di una tesi sperimentale sulla gamification nell'educazione alla cybersecurity. Il gioco raccoglie metriche di performance per analizzare i pattern di apprendimento e l'efficacia degli approcci formativi basati sul gioco.
-
-### Obiettivi Principali
-
-- 🎓 **Educativo**: Insegnare le 7 fasi della Cyber Kill Chain attraverso esempi pratici
-- 🎮 **Coinvolgente**: Elementi di gamification per mantenere interesse e motivazione
-- 📊 **Misurabile**: Raccolta di dati quantitativi per l'analisi della ricerca
-- 🔄 **Adattivo**: Difficoltà dinamica basata sulle performance del giocatore
-
-## ✨ Caratteristiche
-
-### Gameplay Principale
-- **Analisi dei Log**: Log di sicurezza reali da varie fonti (IDS/IPS, EDR, SIEM)
-- **Identificazione delle Fasi**: Riconoscere quale delle 7 fasi della Cyber Kill Chain rappresenta un attacco
-- **Selezione della Mitigazione**: Scegliere la strategia più efficace per interrompere la catena di attacco
-- **Difficoltà Adattiva**: Tre livelli (Principiante, Intermedio, Esperto) che si adattano automaticamente
-
-### Elementi Educativi
-- **Tutorial Interattivo**: Onboarding completo per nuovi giocatori
-- **Feedback Immediato**: Spiegazioni dettagliate per risposte corrette e errate
-- **Evidenziazione degli Indicatori**: Gli indicatori chiave dell'attacco vengono spiegati dopo ogni round
-- **Tracciamento dei Progressi**: Monitorare i miglioramenti attraverso le diverse fasi di attacco
-
-### Gamification
-- **Sistema di Punteggio**: Punteggio basato su accuratezza e tempo di risposta
-- **Bonus Streak**: Ricompense per risposte corrette consecutive
-- **Progressione di Livello**: Sblocca scenari più complessi migliorando le competenze
-- **Sistema Achievement**: Badge per il raggiungimento di traguardi
-- **Classifica**: Confronta le performance con altri giocatori
-
-## 🎮 Demo
-
-### Screenshot
-
-<details>
-<summary>Visualizza Screenshot</summary>
-
-#### Schermata di Benvenuto
-![Schermata di Benvenuto](docs/images/welcome.png)
-
-#### Tutorial
-![Tutorial](docs/images/tutorial.png)
-
-#### Gameplay
-![Gameplay](docs/images/gameplay.png)
-
-#### Selezione Mitigazione
-![Mitigazione](docs/images/mitigation.png)
-
-</details>
-
-### Demo Live
-
-🔗 [Prova la demo live](https://your-demo-url.com)
-
-**Credenziali Demo:**
-- Nessun login richiesto
-- Progressi salvati localmente
-
-## 🚀 Guida Rapida
-
-### Prerequisiti
-
-- **Python** 3.8 o superiore
-- **Node.js** 18.0 o superiore
-- **npm** o **yarn**
-- **Git**
-
-### Installazione
-
-1. **Clona il repository**
-```bash
-git clone https://github.com/yourusername/cyber-kill-chain-analyzer.git
-cd cyber-kill-chain-analyzer
-```
-
-2. **Setup Backend**
-```bash
-# Naviga nella directory backend
-cd backend
-
-# Crea ambiente virtuale
-python -m venv venv
-
-# Attiva ambiente virtuale
-# Su Windows:
-venv\Scripts\activate
-# Su macOS/Linux:
-source venv/bin/activate
-
-# Installa dipendenze
-pip install -r requirements.txt
-```
-
-3. **Setup Frontend**
-```bash
-# Naviga nella directory frontend
-cd ../frontend
-
-# Installa dipendenze
-npm install
-# oppure
-yarn install
-```
-
-### Avvio Rapido
-
-1. **Avvia il Server Backend**
-```bash
-# Dalla directory backend con venv attivato
-cd backend
-python app.py
-```
-Il backend sarà disponibile su `http://localhost:5000`
-
-2. **Avvia il Server di Sviluppo Frontend**
-```bash
-# Dalla directory frontend (nuovo terminale)
-cd frontend
-npm run dev
-# oppure
-yarn dev
-```
-Il frontend sarà disponibile su `http://localhost:5173`
-
-3. **Accedi al Gioco**
-Apri il browser e naviga su `http://localhost:5173`
-
-## 🎯 Come Giocare
-
-### Flusso di Gioco
-
-1. **Schermata di Benvenuto**: Introduzione al gioco
-2. **Tutorial**: Impara le fasi della Cyber Kill Chain e le meccaniche di gioco
-3. **Analisi del Log**: Leggi e analizza il log di sicurezza presentato
-4. **Selezione della Fase**: Identifica quale fase della Cyber Kill Chain rappresenta l'attacco
-5. **Scelta della Mitigazione**: Se corretto, seleziona la strategia di mitigazione più efficace
-6. **Feedback**: Ricevi punti e feedback educativo
-7. **Progressione**: Continua al prossimo log con difficoltà adattata
-
-### Le 7 Fasi della Cyber Kill Chain
-
-| Fase | Icona | Descrizione | Indicatori Esempio |
-|------|-------|-------------|-------------------|
-| **Reconnaissance** | 🔍 | Raccolta informazioni sul target | Enumerazione DNS, port scanning |
-| **Weaponization** | 🔨 | Creazione del payload malevolo | Creazione malware, packaging exploit |
-| **Delivery** | 📧 | Trasmissione dell'arma al target | Email phishing, link malevoli |
-| **Exploitation** | 💥 | Esecuzione del codice exploit | Process injection, sfruttamento vulnerabilità |
-| **Installation** | ⚙️ | Installazione del malware | Meccanismi di persistenza, modifiche registro |
-| **Command & Control** | 📡 | Controllo remoto del sistema | Beaconing, DNS tunneling |
-| **Actions on Objectives** | 🎯 | Raggiungimento obiettivi attaccante | Esfiltrazione dati, deployment ransomware |
-
-### Sistema di Punteggio
-
-| Difficoltà | Punti Base | Bonus Tempo | Bonus Streak |
-|------------|------------|-------------|--------------|
-| Principiante | 10 pts | +0.5/sec | +5 per streak |
-| Intermedio | 25 pts | +0.5/sec | +10 per streak |
-| Esperto | 50 pts | +0.5/sec | +20 per streak |
-
-## 🏗️ Architettura
-
-### Panoramica del Sistema
-
-```
-┌─────────────────┐     ┌─────────────────┐
-│                 │     │                 │
-│  React Frontend │────▶│  Flask Backend  │
-│                 │     │                 │
-└─────────────────┘     └─────────────────┘
-        │                       │
-        │                       │
-        ▼                       ▼
-  [Local Storage]         [Session Store]
-```
-
-### Stack Tecnologico
-
-#### Frontend
-- **React** 18.x - Framework UI
-- **Vite** - Build tool e dev server
-- **Axios** - Client HTTP
-- **CSS3** - Styling con custom properties
-
-#### Backend
-- **Flask** 3.0.0 - Web framework
-- **Flask-CORS** - Cross-origin resource sharing
-- **Python** 3.8+ - Logica backend
-
-### Struttura del Progetto
+## 📂 Struttura del progetto
 
 ```
 cyber-kill-chain-analyzer/
 ├── backend/
-│   ├── app.py              # Applicazione Flask principale
-│   ├── requirements.txt    # Dipendenze Python
-│   └── venv/              # Ambiente virtuale (non nel repo)
+│   ├── app.py                    # Flask application entry point
+│   ├── services/
+│   │   └── game_service.py       # Business logic del gioco
+│   ├── models/
+│   │   └── game_data.py          # Dati statici e configurazione
+│   ├── utils/
+│   │   └── helpers.py            # Utility functions e validazione
+│   ├── requirements.txt          # Dipendenze Python
+│   └── venv/                     # Virtual environment
 ├── frontend/
 │   ├── src/
-│   │   ├── App.jsx        # Componente React principale
-│   │   ├── App.css        # Stili
-│   │   └── main.jsx       # Entry point
-│   ├── package.json       # Dipendenze Node
-│   └── vite.config.js     # Configurazione Vite
-├── docs/
-│   ├── images/           # Screenshot
-│   └── research/         # Documentazione ricerca
-├── README.md
-└── LICENSE
+│   │   ├── App.jsx              # Componente principale React
+│   │   ├── components/          # Componenti UI modulari
+│   │   ├── hooks/               # Custom hooks per la logica
+│   │   ├── utils/               # Costanti e utility
+│   │   └── App.css              # Stili personalizzati e design system
+│   ├── package.json             # Dipendenze Node.js
+│   └── vite.config.js           # Configurazione build tool
+└── README.md                    # Questo file
 ```
 
-## 📡 Documentazione API
+## 🛠️ Clonare la repository
 
-### URL Base
-```
-http://localhost:5000/api
-```
-
-### Endpoint
-
-#### `GET /api/health`
-Endpoint di health check
-
-**Risposta:**
-```json
-{
-  "status": "healthy",
-  "timestamp": "2024-03-15T10:30:00Z",
-  "game": "Cyber Kill Chain Analyzer"
-}
-```
-
-#### `POST /api/get-log`
-Ottieni un nuovo log di sicurezza da analizzare
-
-**Richiesta:**
-```json
-{
-  "session_id": "user_abc123",
-  "difficulty": "beginner",
-  "stats": {
-    "score": 150,
-    "streak": 3,
-    "accuracy": 85
-  }
-}
-```
-
-**Risposta:**
-```json
-{
-  "log": {
-    "id": "recon_1",
-    "raw": "2024-03-15 09:23:17 [IDS] Multiple DNS queries...",
-    "source": "Network IDS",
-    "severity": "Medium",
-    "timestamp": "2024-03-15 09:23:17",
-    "metadata": {...}
-  },
-  "time_limit": 90
-}
-```
-
-#### `POST /api/validate-phase`
-Valida la fase della Cyber Kill Chain selezionata
-
-**Richiesta:**
-```json
-{
-  "session_id": "user_abc123",
-  "selected_phase": "reconnaissance"
-}
-```
-
-**Risposta:**
-```json
-{
-  "is_correct": true,
-  "mitigation_strategies": [...],
-  "explanation": "Le query DNS multiple indicano la fase di reconnaissance...",
-  "indicators": ["Enumerazione DNS", "Scansione esterna"]
-}
-```
-
-#### `POST /api/validate-mitigation`
-Valida la strategia di mitigazione selezionata
-
-**Richiesta:**
-```json
-{
-  "session_id": "user_abc123",
-  "selected_mitigation": "dns_monitoring",
-  "time_remaining": 45,
-  "difficulty": "beginner"
-}
-```
-
-**Risposta:**
-```json
-{
-  "is_correct": true,
-  "points": 35,
-  "selected_effectiveness": "High",
-  "best_mitigation": {...}
-}
-```
-
-## 🔧 Sviluppo
-
-### Setup Ambiente
-
-1. **Variabili d'Ambiente Backend**
-Crea file `.env` nella directory backend:
-```env
-FLASK_ENV=development
-FLASK_DEBUG=True
-SECRET_KEY=your-secret-key-here
-PORT=5000
-```
-
-2. **Variabili d'Ambiente Frontend**
-Crea file `.env` nella directory frontend:
-```env
-VITE_API_URL=http://localhost:5000/api
-VITE_APP_ENV=development
-```
-
-### Stile del Codice
-
-#### Python (Backend)
-- Segui le linee guida PEP 8
-- Usa type hints dove appropriato
-- Lunghezza massima linea: 100 caratteri
-
-#### JavaScript (Frontend)
-- Configurazione ESLint fornita
-- Prettier per la formattazione
-- Usa componenti funzionali con hooks
-
-### Aggiungere Nuovi Contenuti
-
-#### Aggiungere Nuovi Log
-Modifica `backend/app.py`:
-```python
-LOGS_DATABASE['nome_fase'].append({
-    'id': 'id_univoco',
-    'raw': 'Contenuto del log...',
-    'source': 'Nome sistema',
-    'severity': 'Low|Medium|High|Critical',
-    'correctMitre': 'nome_fase',
-    'explanation': 'Spiegazione educativa...',
-    'indicators': ['indicatore1', 'indicatore2']
-})
-```
-
-#### Aggiungere Strategie di Mitigazione
-Modifica `backend/app.py`:
-```python
-MITIGATION_STRATEGIES['nome_fase'].append({
-    'id': 'id_strategia',
-    'name': 'Nome Strategia',
-    'description': 'Descrizione...',
-    'icon': '🛡️',
-    'effectiveness': 'High|Medium|Low'
-})
-```
-
-## 🧪 Testing
-
-### Testing Backend
 ```bash
-cd backend
-python -m pytest tests/
+git clone https://github.com/tuousername/cyber-kill-chain-analyzer.git
+cd cyber-kill-chain-analyzer
 ```
 
-### Testing Frontend
+## 🔧 Setup e Installazione
+
+### Backend (Flask)
+
+1. **Creare virtual environment**:
+   ```bash
+   cd backend
+   python -m venv venv
+   ```
+
+2. **Attivare virtual environment**:
+   ```bash
+   # Windows
+   venv\Scripts\activate
+   
+   # Linux/Mac
+   source venv/bin/activate
+   ```
+
+3. **Installare dipendenze**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Avviare il server**:
+   ```bash
+   python app.py
+   ```
+   Il backend sarà disponibile su `http://localhost:5000`
+
+### Frontend (React)
+
+1. **Installare dipendenze**:
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+2. **Avviare in modalità sviluppo**:
+   ```bash
+   npm run dev
+   ```
+   Il frontend sarà disponibile su `http://localhost:5173`
+
+3. **Build per produzione**:
+   ```bash
+   npm run build
+   ```
+
+## 🎮 Come Giocare
+
+1. **📚 Tutorial**: Inizia con il tutorial per capire le meccaniche di gioco
+2. **📋 Analizza i Log**: Leggi attentamente i log di sicurezza presentati
+3. **🎯 Identifica la Fase**: Seleziona la fase corretta della Cyber Kill Chain
+4. **🛡️ Scegli la Mitigazione**: Se corretto, seleziona la strategia di difesa ottimale
+5. **📈 Accumula Punti**: Guadagna punti in base a velocità e precisione
+6. **🏆 Sblocca Achievement**: Raggiungi traguardi e migliora le tue competenze
+
+### Fasi della Cyber Kill Chain
+
+1. **🔍 Reconnaissance** - Raccolta informazioni sul target
+2. **🔨 Weaponization** - Creazione del payload malevolo
+3. **📧 Delivery** - Consegna del malware al target
+4. **💥 Exploitation** - Sfruttamento delle vulnerabilità
+5. **⚙️ Installation** - Installazione del malware
+6. **📡 Command & Control** - Controllo remoto del sistema
+7. **🎯 Actions on Objectives** - Raggiungimento degli obiettivi
+
+## 🔧 Configurazione
+
+### Variabili Environment
+
+Il progetto utilizza configurazioni predefinite, ma puoi personalizzare:
+
+- **Backend Port**: Modifica in `app.py` (default: 5000)
+- **API Timeout**: Modifica in `frontend/src/utils/constants.js`
+- **Difficoltà**: Configurabile in `backend/models/game_data.py`
+
+### Modalità Debug
+
+Per abilitare il debug completo:
+
 ```bash
-cd frontend
-npm test
-# oppure
-yarn test
+# Backend
+export FLASK_DEBUG=1
+python app.py
+
+# Frontend
+npm run dev -- --debug
 ```
 
-### Checklist Testing Manuale
-- [ ] Il flusso del tutorial funziona correttamente
-- [ ] I log si caricano senza errori
-- [ ] La selezione della fase si valida correttamente
-- [ ] Le strategie di mitigazione appaiono quando la fase è corretta
-- [ ] I punti si calcolano correttamente
-- [ ] La difficoltà si adatta in base alle performance
-- [ ] Il design responsive funziona su mobile
+## 📊 API Endpoints
 
-## 🚢 Deployment
+### Game Management
+- `POST /api/get-log` - Ottiene un nuovo log da analizzare
+- `POST /api/validate-phase` - Valida la fase selezionata
+- `POST /api/validate-mitigation` - Valida la strategia di mitigazione
 
-### Build di Produzione
+### Statistics & Info
+- `GET /api/get-phases` - Lista delle fasi Kill Chain
+- `POST /api/statistics` - Statistiche utente
+- `GET /api/leaderboard` - Classifica globale
+- `GET /api/health` - Health check del sistema
 
-#### Backend
-```bash
-cd backend
-pip install gunicorn
-gunicorn -w 4 -b 0.0.0.0:5000 app:app
-```
+## 🎯 Funzionalità Avanzate
 
-#### Frontend
-```bash
-cd frontend
-npm run build
-# oppure
-yarn build
-```
-I file saranno generati in `frontend/dist/`
+- **🧠 AI-Driven Difficulty**: Algoritmo che adatta la difficoltà dinamicamente
+- **📱 Progressive Web App**: Installabile su dispositivi mobili
+- **🔄 Offline Mode**: Funziona completamente offline con dati di fallback
+- **♿ Accessibility**: Supporto completo per screen reader e navigazione keyboard
+- **🎨 Dark Theme**: Design moderno con tema scuro e animazioni fluide
 
-### Deployment Docker
+## 📝 Roadmap
 
-```dockerfile
-# Esempio Dockerfile
-FROM python:3.8-slim
-WORKDIR /app
-COPY backend/requirements.txt .
-RUN pip install -r requirements.txt
-COPY backend/ .
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
-```
+- [ ] **Database persistente** per statistiche utente
+- [ ] **Modalità multiplayer** con competizioni in tempo reale
+- [ ] **Integrazione MITRE ATT&CK** framework
+- [ ] **Machine Learning** per personalizzazione log
+- [ ] **Mobile app** nativa iOS/Android
+- [ ] **Plugin browser** per analisi log live
 
-### Configurazione Ambiente
+## 🐛 Bug Report & Feature Request
 
-Per la produzione, assicurati che:
-- Le impostazioni CORS siano configurate per il tuo dominio
-- HTTPS sia abilitato
-- Il rate limiting API sia implementato
-- La gestione delle sessioni usi cookie sicuri
-- La persistenza del database sia configurata
+Per segnalare bug o richiedere nuove funzionalità, apri una issue su GitHub con:
+- Descrizione dettagliata del problema/feature
+- Passaggi per riprodurre (per bug)
+- Screenshot se necessario
+- Informazioni su browser/OS
 
-## 📊 Dati di Ricerca
+## 📜 License
 
-### Metriche Raccolte
+Distribuito sotto licenza MIT. Vedi `LICENSE` per maggiori informazioni.
 
-Il gioco raccoglie le seguenti metriche per scopi di ricerca:
+## 🙏 Ringraziamenti
 
-- **Metriche di Performance**
-  - Accuratezza per fase
-  - Distribuzione del tempo di risposta
-  - Progressione della curva di apprendimento
-  - Pattern di errori comuni
-
-- **Metriche di Coinvolgimento**
-  - Durata della sessione
-  - Numero di round giocati
-  - Achievement di streak
-  - Progressione della difficoltà
-
-- **Metriche Educative**
-  - Accuratezza nel riconoscimento delle fasi
-  - Comprensione dell'efficacia delle strategie di mitigazione
-  - Miglioramento nel tempo
-  - Ritenzione delle conoscenze (giocatori che ritornano)
-
-### Esportazione Dati
-
-I dati di ricerca possono essere esportati tramite:
-```bash
-cd backend
-python export_data.py --format csv --output dati_ricerca.csv
-```
-
-### Considerazioni sulla Privacy
-
-- Tutti i dati sono anonimizzati
-- Nessuna informazione personale viene raccolta
-- Gli ID di sessione sono generati casualmente
-- I dati sono salvati localmente per impostazione predefinita
+- **Lockheed Martin** per il framework Cyber Kill Chain
+- **MITRE Corporation** per ATT&CK framework
+- **Symbiotic AI** per le linee guida di cybersecurity education
+- **React Team** per l'eccellente framework frontend
+- **Flask Community** per il micro-framework backend
 
 ---
