@@ -1,6 +1,15 @@
 /**
- * CYBER KILL CHAIN ANALYZER - GAME LOGIC HOOK
- * Custom hook che gestisce tutta la business logic del gioco
+ * CYBER KILL CHAIN ANALYZER - CUSTOM HOOK PER LOGICA DI GIOCO
+ * 
+ * Questo è il cuore dell'applicazione: un custom hook React che incapsula
+ * tutta la business logic del gioco, dalla gestione dello stato alle chiamate API.
+ * 
+ * Seguendo il pattern di separazione delle responsabilità, questo hook:
+ * - Gestisce tutto lo stato del gioco 
+ * - Si occupa delle comunicazioni con il backend
+ * - Calcola punteggi e statistiche
+ * - Gestisce timer e sessioni
+ * - Fornisce funzioni per i componenti UI
  */
 
 import { useState, useEffect, useCallback, useRef } from 'react'
@@ -20,56 +29,64 @@ import {
 
 export function useGameLogic() {
   // ========================================
-  // STATE MANAGEMENT
+  // STATO DEL GIOCO - GESTIONE CENTRALIZZATA
+  // Tutti gli stati dell'applicazione sono centralizzati qui per facilità di gestione
   // ========================================
 
-  // Stati generali del gioco
-  const [gameState, setGameState] = useState(GAME_STATES.WELCOME)
-  const [difficulty, setDifficulty] = useState('beginner')
-  const [isBackendAvailable, setIsBackendAvailable] = useState(true)
+  // --- STATI GENERALI DEL GIOCO ---
+  const [gameState, setGameState] = useState(GAME_STATES.WELCOME)  // Schermata corrente
+  const [difficulty, setDifficulty] = useState('beginner')         // Livello di difficoltà
+  const [isBackendAvailable, setIsBackendAvailable] = useState(true) // Se il server risponde
 
-  // Statistiche giocatore
-  const [score, setScore] = useState(0)
-  const [streak, setStreak] = useState(0)
-  const [level, setLevel] = useState(1)
-  const [accuracy, setAccuracy] = useState(100)
-  const [totalAttempts, setTotalAttempts] = useState(0)
-  const [correctAttempts, setCorrectAttempts] = useState(0)
-  const [phasesCompleted, setPhasesCompleted] = useState({})
+  // --- STATISTICHE E PROGRESSI DEL GIOCATORE ---
+  const [score, setScore] = useState(0)                    // Punteggio totale accumulato
+  const [streak, setStreak] = useState(0)                  // Serie di risposte corrette consecutive
+  const [level, setLevel] = useState(1)                    // Livello del giocatore (basato su score)
+  const [accuracy, setAccuracy] = useState(100)            // Percentuale di accuratezza
+  const [totalAttempts, setTotalAttempts] = useState(0)    // Numero totale di tentativi
+  const [correctAttempts, setCorrectAttempts] = useState(0) // Numero di risposte corrette
+  const [phasesCompleted, setPhasesCompleted] = useState({}) // Conteggio per fase per achievements
 
-  // Stati del round corrente
-  const [currentLog, setCurrentLog] = useState(null)
-  const [timeRemaining, setTimeRemaining] = useState(60)
-  const [selectedPhase, setSelectedPhase] = useState(null)
-  const [selectedMitigation, setSelectedMitigation] = useState(null)
-  const [mitigationStrategies, setMitigationStrategies] = useState([])
+  // --- STATO DEL ROUND CORRENTE ---
+  const [currentLog, setCurrentLog] = useState(null)                    // Log da analizzare
+  const [timeRemaining, setTimeRemaining] = useState(60)                // Secondi rimasti
+  const [selectedPhase, setSelectedPhase] = useState(null)              // Fase scelta dall'utente
+  const [selectedMitigation, setSelectedMitigation] = useState(null)    // Mitigazione scelta
+  const [mitigationStrategies, setMitigationStrategies] = useState([]) // Opzioni di mitigazione disponibili
 
-  // Stati UI e feedback
-  const [feedback, setFeedback] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [achievements, setAchievements] = useState([])
-  const [error, setError] = useState(null)
+  // --- STATI DELL'INTERFACCIA E FEEDBACK ---
+  const [feedback, setFeedback] = useState(null)          // Dati del feedback da mostrare
+  const [isLoading, setIsLoading] = useState(false)       // Se è in corso un caricamento
+  const [achievements, setAchievements] = useState([])     // Lista degli achievements sbloccati
+  const [error, setError] = useState(null)                // Messaggi di errore da mostrare
 
-  // Timer e refs
-  const [isTimerActive, setIsTimerActive] = useState(false)
-  const abortControllerRef = useRef(null)
+  // --- CONTROLLO TIMER E RICHIESTE ---
+  const [isTimerActive, setIsTimerActive] = useState(false) // Se il timer è attivo
+  const abortControllerRef = useRef(null)                  // Per cancellare richieste HTTP
 
   // ========================================
-  // HELPER FUNCTIONS
+  // FUNZIONI DI SUPPORTO E CALCOLI
   // ========================================
 
+  /**
+   * Calcola dinamicamente la difficoltà basata sulle performance del giocatore
+   */
   const calculateDifficulty = useCallback(() => {
     try {
+      // Formula che combina score, streak e accuracy per determinare il livello
       const performanceScore = (score * 0.3) + (streak * 10) + (accuracy * 0.4)
       if (performanceScore < 50) return 'beginner'
       if (performanceScore < 150) return 'intermediate'
       return 'expert'
     } catch (error) {
       console.error('Error calculating difficulty:', error)
-      return 'beginner'
+      return 'beginner' // Fallback sicuro
     }
   }, [score, streak, accuracy])
 
+  /**
+   * Verifica che la risposta dal server contenga i campi richiesti
+   */
   const validateApiResponse = (data, requiredFields = []) => {
     if (!data || typeof data !== 'object') return false
     return requiredFields.every(field => {
@@ -83,69 +100,88 @@ export function useGameLogic() {
     })
   }
 
+  /**
+   * Gestisce gli errori delle chiamate API con messaggi user-friendly
+   */
   const handleApiError = (error, fallbackAction = null) => {
     console.error('API Error:', error)
 
-    // GESTIONE DEGLI ERRORI
+    // Gestione specifica per diversi tipi di errore
     if (error.response?.status === 429) {
+      // Rate limiting
       setError('⏰ Troppi tentativi! Riprova tra qualche minuto.')
       setIsBackendAvailable(false)
     } else if (error.response?.status === 400) {
+      // Errore di validazione
       const errorMsg = error.response.data?.error || 'Dati non validi forniti'
       setError(`❌ ${errorMsg}`)
     } else if (error.code === 'ECONNREFUSED' || error.message?.includes('Network Error')) {
+      // Backend non raggiungibile - attiva modalità offline
       setIsBackendAvailable(false)
       setError('📡 Backend non disponibile. Usando modalità offline.')
       if (fallbackAction) {
-        setTimeout(fallbackAction, 1000)
+        setTimeout(fallbackAction, 1000) // Esegui fallback dopo 1 secondo
       }
     } else {
+      // Altri errori generici
       setError(`⚠️ ${error.response?.data?.error || error.message || 'Errore sconosciuto'}`)
     }
   }
 
   // ========================================
-  // API FUNCTIONS
+  // FUNZIONI PER CHIAMATE API
   // ========================================
 
+  /**
+   * Ottiene un nuovo log di sicurezza dal backend per iniziare un nuovo round
+   */
   const fetchNewLog = useCallback(async () => {
+    // Prepara l'UI per il caricamento
     setIsLoading(true)
     setSelectedPhase(null)
     setSelectedMitigation(null)
     setMitigationStrategies([])
     setError(null)
 
+    // Calcola difficoltà dinamica
     const newDifficulty = calculateDifficulty()
     setDifficulty(newDifficulty)
 
+    // Cancella eventuali richieste precedenti ancora in corso
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
     }
     abortControllerRef.current = new AbortController()
 
     try {
+      // Chiamata al backend per ottenere un nuovo log
       const response = await axios.post(`${API_URL}/get-log`, {
         session_id: SESSION_ID,
         difficulty: newDifficulty,
-        stats: { score, streak, accuracy }
+        stats: { score, streak, accuracy }  // Invia stats per difficoltà dinamica
       }, {
         timeout: API_TIMEOUT,
-        signal: abortControllerRef.current.signal
+        signal: abortControllerRef.current.signal // Per cancellazione richiesta
       })
 
+      // Verifica che la risposta sia valida
       if (validateApiResponse(response.data, ['log.id', 'log.raw', 'time_limit'])) {
+        // Successo - configura il nuovo round
         setCurrentLog(response.data.log)
         setTimeRemaining(response.data.time_limit || 60)
-        setIsTimerActive(true)
+        setIsTimerActive(true)  // Avvia il timer
         setGameState(GAME_STATES.PLAYING)
         setIsBackendAvailable(true)
       } else {
         throw new Error('Invalid response format from server')
       }
     } catch (error) {
+      // Non gestire errori se la richiesta è stata cancellata
       if (error.name === 'AbortError') return
 
+      // Gestisci l'errore e attiva modalità offline se necessario
       handleApiError(error, () => {
+        // Fallback: usa un log di esempio
         const fallbackLog = FALLBACK_LOGS[Math.floor(Math.random() * FALLBACK_LOGS.length)]
         setCurrentLog({
           ...fallbackLog,
@@ -160,18 +196,23 @@ export function useGameLogic() {
     }
   }, [score, streak, accuracy, calculateDifficulty])
 
+  /**
+   * Valida la fase della Kill Chain selezionata dall'utente
+   */
   const validatePhase = useCallback(async () => {
     if (!selectedPhase) {
       setError('Nessuna fase selezionata')
       return
     }
 
+    // Ferma il timer e prepara per la validazione
     setIsTimerActive(false)
     setIsLoading(true)
     setError(null)
 
     try {
       if (isBackendAvailable) {
+        // Chiamata al backend per la validazione
         const response = await axios.post(`${API_URL}/validate-phase`, {
           session_id: SESSION_ID,
           selected_phase: selectedPhase
@@ -179,6 +220,7 @@ export function useGameLogic() {
 
         if (validateApiResponse(response.data, ['is_correct'])) {
           if (response.data.is_correct) {
+            // RISPOSTA CORRETTA - Procedi alla selezione mitigazione
             setMitigationStrategies(response.data.mitigation_strategies || FALLBACK_MITIGATIONS)
             setFeedback({
               type: FEEDBACK_TYPES.PHASE_CORRECT,
@@ -187,17 +229,19 @@ export function useGameLogic() {
             })
             setGameState(GAME_STATES.MITIGATION)
 
+            // Aggiorna conteggio fasi per achievements
             const phaseCount = phasesCompleted[selectedPhase] || 0
             setPhasesCompleted(prev => ({ ...prev, [selectedPhase]: phaseCount + 1 }))
           } else {
+            // RISPOSTA SBAGLIATA - Mostra feedback educativo
             handleIncorrectPhase(response.data)
           }
         } else {
           throw new Error('Invalid response format')
         }
       } else {
-        // Modalità offline
-        const isCorrect = Math.random() > 0.3
+        // MODALITÀ OFFLINE - Simula la validazione
+        const isCorrect = Math.random() > 0.3 // 70% di probabilità di successo
 
         if (isCorrect) {
           setMitigationStrategies(FALLBACK_MITIGATIONS)
@@ -217,6 +261,7 @@ export function useGameLogic() {
         }
       }
     } catch (error) {
+      // Errore nella validazione - usa fallback
       handleApiError(error, () => {
         setMitigationStrategies(FALLBACK_MITIGATIONS)
         setFeedback({
@@ -231,6 +276,9 @@ export function useGameLogic() {
     }
   }, [selectedPhase, isBackendAvailable, phasesCompleted])
 
+  /**
+   * Valida la strategia di mitigazione selezionata e calcola il punteggio
+   */
   const validateMitigation = useCallback(async () => {
     if (!selectedMitigation) {
       setError('Nessuna mitigazione selezionata')
@@ -242,6 +290,7 @@ export function useGameLogic() {
 
     try {
       if (isBackendAvailable) {
+        // Chiamata al backend per validare mitigazione
         const response = await axios.post(`${API_URL}/validate-mitigation`, {
           session_id: SESSION_ID,
           selected_mitigation: selectedMitigation,
@@ -255,7 +304,8 @@ export function useGameLogic() {
           throw new Error('Invalid response format')
         }
       } else {
-        const isCorrect = Math.random() > 0.4
+        // MODALITÀ OFFLINE - Simula il risultato
+        const isCorrect = Math.random() > 0.4 // 60% probabilità successo
         const points = isCorrect ? 25 + Math.floor(timeRemaining * 0.5) : 5
 
         handleMitigationResult({
@@ -266,6 +316,7 @@ export function useGameLogic() {
         })
       }
     } catch (error) {
+      // Errore - usa risultato di fallback
       handleApiError(error, () => {
         handleMitigationResult({
           is_correct: true,
@@ -280,10 +331,14 @@ export function useGameLogic() {
   }, [selectedMitigation, timeRemaining, difficulty, isBackendAvailable])
 
   // ========================================
-  // HELPER FUNCTIONS FOR VALIDATION
+  // FUNZIONI DI SUPPORTO PER LA VALIDAZIONE
   // ========================================
 
+  /**
+   * Gestisce il caso di fase identificata incorrettamente
+   */
   const handleIncorrectPhase = (responseData) => {
+    // Reset streak e aggiorna statistiche
     setStreak(0)
     setTotalAttempts(prev => {
       const newTotal = prev + 1
@@ -291,6 +346,7 @@ export function useGameLogic() {
       return newTotal
     })
 
+    // Imposta feedback educativo
     setFeedback({
       type: FEEDBACK_TYPES.PHASE_INCORRECT,
       correct_phase: responseData.correct_phase,
@@ -301,10 +357,16 @@ export function useGameLogic() {
     setGameState(GAME_STATES.PHASE_FEEDBACK)
   }
 
+  /**
+   * Gestisce il risultato della validazione della mitigazione
+   */
   const handleMitigationResult = (result) => {
     const points = result.points || 0
 
+    // Aggiorna punteggio
     setScore(prev => prev + points)
+    
+    // Aggiorna statistiche e streak
     setTotalAttempts(prev => {
       const newTotal = prev + 1
       const newCorrect = result.is_correct ? correctAttempts + 1 : correctAttempts
@@ -320,14 +382,17 @@ export function useGameLogic() {
       return newTotal
     })
 
+    // Level up se ha abbastanza punti
     if (score + points >= level * 100) {
       setLevel(prev => prev + 1)
     }
 
+    // Controlla achievements se ha risposto correttamente
     if (result.is_correct) {
       checkAchievements(streak + 1, score + points)
     }
 
+    // Imposta feedback finale
     setFeedback({
       type: FEEDBACK_TYPES.FINAL,
       is_correct: result.is_correct,
@@ -340,18 +405,24 @@ export function useGameLogic() {
   }
 
   // ========================================
-  // ACHIEVEMENTS SYSTEM
+  // SISTEMA ACHIEVEMENTS
   // ========================================
 
+  /**
+   * Controlla se il giocatore ha sbloccato nuovi achievements
+   */
   const checkAchievements = useCallback((currentStreak, currentScore) => {
     const newAchievements = []
 
+    // Achievement basati su streak
     if (currentStreak === 5 && !achievements.includes('streak_5')) {
       newAchievements.push('streak_5')
     }
     if (currentStreak === 10 && !achievements.includes('streak_10')) {
       newAchievements.push('streak_10')
     }
+    
+    // Achievement basati su punteggio
     if (currentScore >= 500 && !achievements.includes('score_500')) {
       newAchievements.push('score_500')
     }
@@ -359,30 +430,36 @@ export function useGameLogic() {
       newAchievements.push('score_1000')
     }
 
+    // Achievement per maestria delle fasi
     const masteredPhases = Object.values(phasesCompleted).filter(count => count >= 3).length
     if (masteredPhases >= 4 && !achievements.includes('phase_master')) {
       newAchievements.push('phase_master')
     }
 
+    // Aggiungi nuovi achievements alla lista
     if (newAchievements.length > 0) {
       setAchievements(prev => [...prev, ...newAchievements])
     }
   }, [achievements, phasesCompleted])
 
   // ========================================
-  // TIMER EFFECT
+  // GESTIONE TIMER CON useEffect
   // ========================================
 
   useEffect(() => {
     let timeoutId = null
 
+    // Timer attivo e tempo rimanente - decrementa ogni secondo
     if (isTimerActive && timeRemaining > 0 && gameState === GAME_STATES.PLAYING) {
       timeoutId = setTimeout(() => {
         setTimeRemaining(prev => prev - 1)
       }, 1000)
-    } else if (timeRemaining === 0 && isTimerActive && gameState === GAME_STATES.PLAYING) {
+    } 
+    // Tempo scaduto - gestisci timeout
+    else if (timeRemaining === 0 && isTimerActive && gameState === GAME_STATES.PLAYING) {
       setIsTimerActive(false)
 
+      // Imposta feedback di timeout
       setFeedback({
         type: FEEDBACK_TYPES.TIMEOUT,
         title: 'Tempo Scaduto!',
@@ -392,6 +469,7 @@ export function useGameLogic() {
       })
       setGameState(GAME_STATES.PHASE_FEEDBACK)
 
+      // Reset streak e aggiorna statistiche per timeout
       setStreak(0)
       setTotalAttempts(prev => {
         const newTotal = prev + 1
@@ -400,6 +478,7 @@ export function useGameLogic() {
       })
     }
 
+    // Cleanup del timeout
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId)
@@ -408,10 +487,11 @@ export function useGameLogic() {
   }, [timeRemaining, isTimerActive, gameState, correctAttempts])
 
   // ========================================
-  // CLEANUP EFFECT
+  // CLEANUP GENERALE
   // ========================================
 
   useEffect(() => {
+    // Cleanup quando il componente viene smontato
     return () => {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort()
@@ -420,26 +500,27 @@ export function useGameLogic() {
   }, [])
 
   // ========================================
-  // PUBLIC API
+  // API PUBBLICA DEL HOOK
+  // Restituisce tutti gli stati e funzioni necessarie ai componenti
   // ========================================
 
   return {
-    // Game State
+    // Stati del gioco
     gameState,
     setGameState,
     difficulty,
     isBackendAvailable,
 
-    // Player Stats
+    // Statistiche del giocatore
     score,
-    streak,
+    streak, 
     level,
     accuracy,
     totalAttempts,
     correctAttempts,
     achievements,
 
-    // Current Round
+    // Dati del round corrente
     currentLog,
     timeRemaining,
     selectedPhase,
@@ -448,19 +529,19 @@ export function useGameLogic() {
     setSelectedMitigation,
     mitigationStrategies,
 
-    // UI State
+    // Stati dell'interfaccia
     feedback,
     isLoading,
     error,
     setError,
     isTimerActive,
 
-    // Actions
+    // Funzioni di azione
     fetchNewLog,
     validatePhase,
     validateMitigation,
 
-    // Helpers
+    // Dati di supporto
     phasesCompleted
   }
 }
