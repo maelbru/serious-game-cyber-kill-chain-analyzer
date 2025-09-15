@@ -199,7 +199,7 @@ html, body {
 }
 
 /* ============================================
-   OFFLINE NOTICE (NUOVO)
+   OFFLINE NOTICE
    ============================================ */
 
 .offline-notice {
@@ -706,22 +706,22 @@ html, body {
   text-transform: uppercase;
 }
 
-.severity-badge.low {
+.severity-badge.bassa {
   background: rgba(16, 185, 129, 0.2);
   color: #10b981;
 }
 
-.severity-badge.medium {
+.severity-badge.media {
   background: rgba(245, 158, 11, 0.2);
   color: var(--primary-orange);
 }
 
-.severity-badge.high {
+.severity-badge.alta {
   background: rgba(239, 68, 68, 0.2);
   color: var(--primary-red);
 }
 
-.severity-badge.critical {
+.severity-badge.critica {
   background: rgba(239, 68, 68, 0.3);
   color: #ff6b6b;
   animation: pulse 2s infinite;
@@ -1074,22 +1074,22 @@ html, body {
   text-transform: uppercase;
 }
 
-.effectiveness-badge.very-high {
+.effectiveness-badge.molto-alta {
   background: linear-gradient(135deg, var(--primary-green), #059669);
   color: white;
 }
 
-.effectiveness-badge.high {
+.effectiveness-badge.alta {
   background: rgba(16, 185, 129, 0.2);
   color: var(--primary-green);
 }
 
-.effectiveness-badge.medium {
+.effectiveness-badge.media {
   background: rgba(245, 158, 11, 0.2);
   color: var(--primary-orange);
 }
 
-.effectiveness-badge.low {
+.effectiveness-badge.bassa {
   background: rgba(239, 68, 68, 0.2);
   color: var(--primary-red);
 }

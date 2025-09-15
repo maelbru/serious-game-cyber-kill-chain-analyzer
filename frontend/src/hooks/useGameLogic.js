@@ -118,7 +118,7 @@ export function useGameLogic() {
     } else if (error.code === 'ECONNREFUSED' || error.message?.includes('Network Error')) {
       // Backend non raggiungibile - attiva modalità offline
       setIsBackendAvailable(false)
-      setError('📡 Backend non disponibile. Usando modalità offline.')
+      setError('📡 Backend non disponibile. Modalità offline attivata.')
       
       // Riprova connessione automaticamente dopo 30 secondi
       setTimeout(() => {
@@ -187,7 +187,7 @@ export function useGameLogic() {
         setGameState(GAME_STATES.PLAYING)
         setIsBackendAvailable(true)
       } else {
-        throw new Error('Invalid response format from server')
+        throw new Error('Formato risposta non valido dal server')
       }
     } catch (error) {
       // Non gestire errori se la richiesta è stata cancellata
@@ -252,7 +252,7 @@ export function useGameLogic() {
             handleIncorrectPhase(response.data)
           }
         } else {
-          throw new Error('Invalid response format')
+          throw new Error('Formato risposta non valido')
         }
       } else {
         // MODALITÀ OFFLINE - Simula la validazione
@@ -282,7 +282,7 @@ export function useGameLogic() {
         setFeedback({
           type: FEEDBACK_TYPES.PHASE_CORRECT,
           explanation: 'Modalità offline attiva',
-          indicators: ['Fallback mode']
+          indicators: ['Modalità fallback']
         })
         setGameState(GAME_STATES.MITIGATION)
       })
@@ -297,7 +297,7 @@ export function useGameLogic() {
   const validateMitigation = useCallback(async () => {
     // Prevenire chiamate multiple durante validazione
     if (!selectedMitigation || isLoading) {
-      setError(isLoading ? 'Validazione in corso...' : 'Nessuna mitigazione selezionata')
+      setError(isLoading ? 'Validazione in corso...' : 'Nessuna contromisura selezionata')
       return
     }
 
@@ -317,7 +317,7 @@ export function useGameLogic() {
         if (validateApiResponse(response.data, ['is_correct', 'points'])) {
           handleMitigationResult(response.data)
         } else {
-          throw new Error('Invalid response format')
+          throw new Error('Formato risposta non valido')
         }
       } else {
         // MODALITÀ OFFLINE - Simula il risultato
@@ -327,7 +327,7 @@ export function useGameLogic() {
         handleMitigationResult({
           is_correct: isCorrect,
           points: points,
-          selected_effectiveness: 'High',
+          selected_effectiveness: 'Alta',
           best_mitigation: FALLBACK_MITIGATIONS[0]
         })
       }
@@ -337,7 +337,7 @@ export function useGameLogic() {
         handleMitigationResult({
           is_correct: true,
           points: 15,
-          selected_effectiveness: 'Medium',
+          selected_effectiveness: 'Media',
           best_mitigation: FALLBACK_MITIGATIONS[0]
         })
       })

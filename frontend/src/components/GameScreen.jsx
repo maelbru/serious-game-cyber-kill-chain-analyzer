@@ -44,15 +44,15 @@ export function GameScreen({
         <header className="game-header">
           <div className="header-stats">
             <div className="stat-item">
-              <span className="stat-label">Score</span>
+              <span className="stat-label">Punteggio</span>
               <span className="stat-value">{score}</span>
             </div>
             <div className="stat-item">
-              <span className="stat-label">Streak</span>
+              <span className="stat-label">Serie</span>
               <span className="stat-value">{streak}🔥</span>
             </div>
             <div className="stat-item">
-              <span className="stat-label">Level</span>
+              <span className="stat-label">Livello</span>
               <span className="stat-value">{level}</span>
             </div>
           </div>
@@ -62,7 +62,7 @@ export function GameScreen({
           <div className="success-message">
             <span className="success-icon">✓</span>
             <h2>Ottimo! Hai identificato correttamente la fase.</h2>
-            <p>Ora seleziona la strategia di mitigazione più efficace per interrompere la Kill Chain:</p>
+            <p>Ora seleziona la strategia di difesa più efficace per interrompere la Kill Chain:</p>
           </div>
 
           <div className="mitigation-grid">
@@ -89,7 +89,7 @@ export function GameScreen({
             onClick={validateMitigation}
             disabled={!selectedMitigation || isLoading}
           >
-            {isLoading ? 'Validazione...' : 'Conferma Mitigazione'}
+            {isLoading ? 'Validazione in corso...' : 'Conferma Contromisura'}
           </button>
         </div>
       </div>
@@ -110,19 +110,19 @@ export function GameScreen({
 
         <div className="header-stats">
           <div className="stat-item">
-            <span className="stat-label">Score</span>
+            <span className="stat-label">Punteggio</span>
             <span className="stat-value">{score}</span>
           </div>
           <div className="stat-item">
-            <span className="stat-label">Streak</span>
+            <span className="stat-label">Serie</span>
             <span className="stat-value">{streak}🔥</span>
           </div>
           <div className="stat-item">
-            <span className="stat-label">Accuracy</span>
+            <span className="stat-label">Precisione</span>
             <span className="stat-value">{accuracy}%</span>
           </div>
           <div className="stat-item">
-            <span className="stat-label">Level</span>
+            <span className="stat-label">Livello</span>
             <span className="stat-value">{level}</span>
           </div>
         </div>
@@ -139,7 +139,7 @@ export function GameScreen({
             ======================================== */}
         <div className="log-section">
           <div className="section-header">
-            <h2>📋 Analisi dei log di sicurezza</h2>
+            <h2>📋 Analisi dei Log di Sicurezza</h2>
             <div className={`timer ${
               timeRemaining <= 15 ? 'critical' : 
               timeRemaining <= 30 ? 'warning' : ''
@@ -164,7 +164,7 @@ export function GameScreen({
 
               {currentLog.metadata && Object.keys(currentLog.metadata).length > 0 && (
                 <div className="log-metadata">
-                  <h4>Metadata:</h4>
+                  <h4>Metadati:</h4>
                   <div className="metadata-grid">
                     {Object.entries(currentLog.metadata).map(([key, value]) => (
                       <div key={key} className="metadata-item">
@@ -191,7 +191,7 @@ export function GameScreen({
             ======================================== */}
         <div className="killchain-section">
           <div className="section-header">
-            <h2>🎯 Individua la fase della Cyber Kill Chain</h2>
+            <h2>🎯 Identifica la Fase della Cyber Kill Chain</h2>
           </div>
 
           <div className="phases-container">
@@ -229,7 +229,7 @@ export function GameScreen({
             onClick={validatePhase}
             disabled={!selectedPhase || isLoading}
           >
-            {isLoading ? 'Validazione...' : 'Procedi'}
+            {isLoading ? 'Validazione in corso...' : 'Conferma Selezione'}
           </button>
         </div>
       </div>

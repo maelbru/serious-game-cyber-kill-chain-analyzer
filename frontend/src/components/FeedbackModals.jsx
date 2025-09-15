@@ -41,7 +41,7 @@ export function FeedbackModals({
 
           <h2 className="feedback-title">
             {feedback.type === FEEDBACK_TYPES.TIMEOUT ? 'Tempo Scaduto!' :
-             feedback.type === FEEDBACK_TYPES.PHASE_CORRECT ? 'Risposta esatta!' : 'Risposta errata!'}
+             feedback.type === FEEDBACK_TYPES.PHASE_CORRECT ? 'Risposta Corretta!' : 'Risposta Errata!'}
           </h2>
 
           {/* Messaggio specifico per timeout */}
@@ -84,12 +84,12 @@ export function FeedbackModals({
           {/* Consigli specifici per timeout */}
           {feedback.type === FEEDBACK_TYPES.TIMEOUT && (
             <div className="timeout-tips">
-              <h4>💡 Consigli per il prossimo round:</h4>
+              <h4>💡 Suggerimenti per il prossimo round:</h4>
               <ul>
                 <li>Leggi rapidamente il log cercando parole chiave</li>
-                <li>Identifica la fonte (Network, Email, Endpoint, etc.)</li>
-                <li>Cerca indicatori di azione (scan, query, injection, etc.)</li>
-                <li>Non overthinking - fidati del primo istinto</li>
+                <li>Identifica la fonte (Rete, Email, Endpoint, ecc.)</li>
+                <li>Cerca indicatori di azione (scansione, query, iniezione, ecc.)</li>
+                <li>Non pensarci troppo - fidati del primo istinto</li>
               </ul>
             </div>
           )}
@@ -129,7 +129,7 @@ export function FeedbackModals({
 
           {feedback.selected_effectiveness && (
             <div className="effectiveness-feedback">
-              <p>La tua scelta aveva efficacia: <strong>{feedback.selected_effectiveness}</strong></p>
+              <p>La tua scelta aveva un'efficacia: <strong>{feedback.selected_effectiveness}</strong></p>
               {!feedback.is_correct && feedback.best_mitigation && (
                 <div className="best-strategy">
                   <h4>Strategia Ottimale:</h4>
@@ -144,18 +144,18 @@ export function FeedbackModals({
           )}
 
           <div className="progress-summary">
-            <h4>Progressi:</h4>
+            <h4>I Tuoi Progressi:</h4>
             <div className="progress-stats">
               <div className="progress-item">
-                <span>Score Totale:</span>
+                <span>Punteggio Totale</span>
                 <span>{score}</span>
               </div>
               <div className="progress-item">
-                <span>Accuracy:</span>
+                <span>Precisione</span>
                 <span>{accuracy}%</span>
               </div>
               <div className="progress-item">
-                <span>Livello:</span>
+                <span>Livello</span>
                 <span>{level}</span>
               </div>
             </div>

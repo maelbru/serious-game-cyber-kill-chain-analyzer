@@ -31,7 +31,7 @@ export function WelcomeScreen({
           {/* Header del tutorial con titolo e sottotitolo */}
           <div className="tutorial-header">
             <h1>📖 Come Giocare</h1>
-            <p>Impara a identificare e fermare gli attacchi informatici!</p>
+            <p>Impara a identificare e bloccare gli attacchi informatici!</p>
           </div>
 
           {/* Griglia con i passaggi del tutorial */}
@@ -43,8 +43,8 @@ export function WelcomeScreen({
               <div className="step-content">
                 <h3>📋 Analizza il Log</h3>
                 <p>
-                  Ogni round ti verrà presentato un log di sicurezza reale. 
-                  Leggilo attentamente per identificare indicatori di attacco.
+                  In ogni round ti verrà presentato un log di sicurezza reale. 
+                  Leggilo attentamente per identificare gli indicatori di attacco.
                 </p>
               </div>
             </div>
@@ -56,7 +56,7 @@ export function WelcomeScreen({
                 <h3>🎯 Identifica la Fase</h3>
                 <p>
                   Basandoti sugli indicatori nel log, determina in quale delle 7 fasi 
-                  della Cyber Kill Chain si trova l'attacco.
+                  della Cyber Kill Chain si trova l'attaccante.
                 </p>
               </div>
             </div>
@@ -65,10 +65,10 @@ export function WelcomeScreen({
             <div className="tutorial-step">
               <span className="step-number">3</span>
               <div className="step-content">
-                <h3>🛡️ Scegli la Mitigazione</h3>
+                <h3>🛡️ Scegli la Contromisura</h3>
                 <p>
                   Se identifichi correttamente la fase, dovrai scegliere la strategia 
-                  di mitigazione più efficace per interrompere l'attacco.
+                  di difesa più efficace per interrompere l'attacco.
                 </p>
               </div>
             </div>
@@ -79,8 +79,8 @@ export function WelcomeScreen({
               <div className="step-content">
                 <h3>⏱️ Tempo e Punti</h3>
                 <p>
-                  Più velocemente rispondi correttamente, più punti guadagni! 
-                  Il timer si adatta alla tua bravura.
+                  Più rapidamente rispondi correttamente, più punti guadagni! 
+                  Il timer si adatta alle tue competenze crescenti.
                 </p>
               </div>
             </div>
@@ -92,7 +92,7 @@ export function WelcomeScreen({
             className="btn-start-game" 
             onClick={() => setGameState(GAME_STATES.WELCOME)}
           >
-            Capito! Iniziamo 🚀
+            Ho Capito! Iniziamo 🚀
           </button>
           
         </div>
@@ -128,7 +128,7 @@ export function WelcomeScreen({
         {!isBackendAvailable && (
           <div className="offline-notice">
             <span className="offline-icon">📡</span>
-            <span>Modalità Offline Attiva - Funzionalità limitate</span>
+            <span>Modalità Offline Attiva - Funzionalità Limitate</span>
           </div>
         )}
 
@@ -163,7 +163,7 @@ export function WelcomeScreen({
             className="btn-secondary" 
             onClick={() => setGameState(GAME_STATES.TUTORIAL)}
           >
-            📖 Tutorial
+            📖 Come Giocare
           </button>
           
         </div>
