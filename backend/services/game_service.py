@@ -221,7 +221,7 @@ class GameService:
     
     @staticmethod
     def validate_mitigation_selection(session_id, selected_mitigation, time_remaining, difficulty):
-         """
+        """
         Valida la strategia di mitigazione scelta dall'utente e calcola i punti
         
         Args:
