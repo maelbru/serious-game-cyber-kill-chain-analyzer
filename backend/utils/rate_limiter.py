@@ -26,6 +26,10 @@ def create_limiter(app):
         # Fallback a memoria (sviluppo)
         storage_uri = "memory://"
         logger.warning("Rate limiter using memory storage (development only)")
+    # Except generale per altri errori Redis
+    except Exception as e:
+        logger.error(f"Redis error: {e}, falling back to memory")
+        storage_uri = "memory://"
     
     limiter = Limiter(
         app=app,

@@ -120,7 +120,7 @@ export function useGameLogic() {
       setIsBackendAvailable(false)
       setError('📡 Backend non disponibile. Usando modalità offline.')
       
-      // ✅ FIX: Riprova connessione automaticamente dopo 30 secondi
+      // Riprova connessione automaticamente dopo 30 secondi
       setTimeout(() => {
         setIsBackendAvailable(true)
         console.log('Retrying backend connection...')
@@ -143,7 +143,7 @@ export function useGameLogic() {
    * Ottiene un nuovo log di sicurezza dal backend per iniziare un nuovo round
    */
   const fetchNewLog = useCallback(async () => {
-    // ✅ FIX: Prevenire chiamate multiple se già in caricamento
+    // Prevenire chiamate multiple se già in caricamento
     if (isLoading) {
       console.warn('fetchNewLog called while already loading')
       return
@@ -160,9 +160,10 @@ export function useGameLogic() {
     const newDifficulty = calculateDifficulty()
     setDifficulty(newDifficulty)
 
-    // Cancella eventuali richieste precedenti ancora in corso
+    // Cleanup più robusto delle richieste
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
+      abortControllerRef.current = null // Previene memory leak
     }
     abortControllerRef.current = new AbortController()
 
@@ -207,13 +208,13 @@ export function useGameLogic() {
     } finally {
       setIsLoading(false)
     }
-  }, [score, streak, accuracy, calculateDifficulty, isLoading]) // ✅ FIX: Aggiungi isLoading alle dipendenze
+  }, [score, streak, accuracy, calculateDifficulty, isLoading])
 
   /**
    * Valida la fase della Kill Chain selezionata dall'utente
    */
   const validatePhase = useCallback(async () => {
-    // ✅ FIX: Prevenire chiamate multiple durante validazione
+    // Prevenire chiamate multiple durante validazione
     if (!selectedPhase || isLoading) {
       setError(isLoading ? 'Validazione in corso...' : 'Nessuna fase selezionata')
       return
@@ -247,7 +248,7 @@ export function useGameLogic() {
             const phaseCount = phasesCompleted[selectedPhase] || 0
             setPhasesCompleted(prev => ({ ...prev, [selectedPhase]: phaseCount + 1 }))
           } else {
-            // RISPOSTA SBAGLIATA - Mostra feedback educativo
+            // RISPOSTA SBAGLIATA - Fornisci feedback educativo
             handleIncorrectPhase(response.data)
           }
         } else {
@@ -288,13 +289,13 @@ export function useGameLogic() {
     } finally {
       setIsLoading(false)
     }
-  }, [selectedPhase, isLoading, isBackendAvailable, phasesCompleted]) // ✅ FIX: Aggiungi isLoading alle dipendenze
+  }, [selectedPhase, isLoading, isBackendAvailable, phasesCompleted])
 
   /**
    * Valida la strategia di mitigazione selezionata e calcola il punteggio
    */
   const validateMitigation = useCallback(async () => {
-    // ✅ FIX: Prevenire chiamate multiple durante validazione
+    // Prevenire chiamate multiple durante validazione
     if (!selectedMitigation || isLoading) {
       setError(isLoading ? 'Validazione in corso...' : 'Nessuna mitigazione selezionata')
       return
@@ -343,7 +344,7 @@ export function useGameLogic() {
     } finally {
       setIsLoading(false)
     }
-  }, [selectedMitigation, timeRemaining, difficulty, isLoading, isBackendAvailable]) // ✅ FIX: Aggiungi isLoading alle dipendenze
+  }, [selectedMitigation, timeRemaining, difficulty, isLoading, isBackendAvailable])
 
   // ========================================
   // FUNZIONI DI SUPPORTO PER LA VALIDAZIONE
@@ -357,7 +358,7 @@ export function useGameLogic() {
     setStreak(0)
     setTotalAttempts(prev => {
       const newTotal = prev + 1
-      // ✅ FIX: Aggiungi controllo per evitare divisione per zero
+      // Aggiungi controllo per evitare divisione per zero
       setAccuracy(newTotal > 0 ? Math.round((correctAttempts / newTotal) * 100) : 100)
       return newTotal
     })
@@ -394,7 +395,7 @@ export function useGameLogic() {
         setStreak(0)
       }
 
-      // ✅ FIX: Aggiungi controllo per evitare divisione per zero
+      // Aggiungi controllo per evitare divisione per zero
       setAccuracy(newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 100)
       return newTotal
     })
@@ -431,25 +432,28 @@ export function useGameLogic() {
   const checkAchievements = useCallback((currentStreak, currentScore) => {
     const newAchievements = []
 
+    // Controlla PRIMA se l'achievement esiste già per evitare duplicati
+    const hasAchievement = (id) => achievements.includes(id)
+
     // Achievement basati su streak
-    if (currentStreak === 5 && !achievements.includes('streak_5')) {
+    if (currentStreak === 5 && !hasAchievement('streak_5')) {
       newAchievements.push('streak_5')
     }
-    if (currentStreak === 10 && !achievements.includes('streak_10')) {
+    if (currentStreak === 10 && !hasAchievement('streak_10')) {
       newAchievements.push('streak_10')
     }
     
     // Achievement basati su punteggio
-    if (currentScore >= 500 && !achievements.includes('score_500')) {
+    if (currentScore >= 500 && !hasAchievement('score_500')) {
       newAchievements.push('score_500')
     }
-    if (currentScore >= 1000 && !achievements.includes('score_1000')) {
+    if (currentScore >= 1000 && !hasAchievement('score_1000')) {
       newAchievements.push('score_1000')
     }
 
     // Achievement per maestria delle fasi
     const masteredPhases = Object.values(phasesCompleted).filter(count => count >= 3).length
-    if (masteredPhases >= 4 && !achievements.includes('phase_master')) {
+    if (masteredPhases >= 4 && !hasAchievement('phase_master')) {
       newAchievements.push('phase_master')
     }
 
@@ -466,8 +470,8 @@ export function useGameLogic() {
   useEffect(() => {
     let timeoutId = null
 
-    // Timer attivo e tempo rimanente - decrementa ogni secondo
-    if (isTimerActive && timeRemaining > 0 && gameState === GAME_STATES.PLAYING) {
+    // Timer attivo e tempo rimanente
+    if (isTimerActive && timeRemaining > 0 && gameState === GAME_STATES.PLAYING && !isLoading) {
       timeoutId = setTimeout(() => {
         setTimeRemaining(prev => prev - 1)
       }, 1000)
@@ -476,7 +480,7 @@ export function useGameLogic() {
     else if (timeRemaining === 0 && isTimerActive && gameState === GAME_STATES.PLAYING) {
       setIsTimerActive(false)
       
-      // ✅ FIX: Reset stati del round al timeout
+      // Reset stati del round al timeout
       setSelectedPhase(null)
       setSelectedMitigation(null)
 
@@ -494,20 +498,20 @@ export function useGameLogic() {
       setStreak(0)
       setTotalAttempts(prev => {
         const newTotal = prev + 1
-        // ✅ FIX: Aggiungi controllo per evitare divisione per zero
+        // Aggiungi controllo per evitare divisione per zero
         setAccuracy(newTotal > 0 ? Math.round((correctAttempts / newTotal) * 100) : 100)
         return newTotal
       })
     }
 
-    // ✅ FIX: Cleanup più robusto del timeout
+    // Cleanup più robusto del timeout
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId)
         timeoutId = null
       }
     }
-  }, [timeRemaining, isTimerActive, gameState, correctAttempts])
+  }, [timeRemaining, isTimerActive, gameState, correctAttempts, isLoading]) // Aggiungi isLoading
 
   // ========================================
   // CLEANUP GENERALE
@@ -518,6 +522,7 @@ export function useGameLogic() {
     return () => {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort()
+        abortControllerRef.current = null // Previeni memory leak
       }
     }
   }, [])

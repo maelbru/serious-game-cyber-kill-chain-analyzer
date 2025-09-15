@@ -13,6 +13,9 @@ from models.game_data import (
 )
 from utils.helpers import (
     validate_session_data,
+    format_api_response,
+    handle_api_error,
+    get_current_timestamp,
     validate_difficulty,
     validate_phase,
     validate_stats,
@@ -20,7 +23,6 @@ from utils.helpers import (
     calculate_points,
     calculate_time_limit,
     sanitize_log_data,
-    get_current_timestamp,
     log_user_action,
     get_effectiveness_score
 )
@@ -82,11 +84,11 @@ class GameService:
             dict: Contiene il log da analizzare, tempo limite e difficoltà effettiva
         """
         try:
-            # Valida e pulisce i parametri di input
+            # Valida e pulisce i parametri di input PRIMA di creare la sessione
             difficulty = validate_difficulty(difficulty)
             stats = validate_stats(stats or {})
             
-            # Ottieni o crea la sessione per questo utente
+            # Ottieni o crea la sessione DOPO la validazione
             session = GameService.get_or_create_session(session_id)
             
             # Calcola la difficoltà dinamica basata sulle performance
@@ -167,7 +169,12 @@ class GameService:
             
             # Verifica che ci sia un log attivo da validare
             if not correct_phase:
-                raise ValueError("No active log to validate")
+                # Pulisci la sessione se è in stato inconsistente
+                session['current_log'] = None
+                session['log_data'] = {}
+                session['correct_phase'] = None
+                session['correct_mitigation'] = None
+                raise ValueError("No active log to validate - session cleaned")
             
             # Controlla se la risposta è corretta
             is_correct = selected_phase == correct_phase
