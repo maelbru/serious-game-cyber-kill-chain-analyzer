@@ -74,7 +74,7 @@ LOGS_DATABASE = {
             'metadata': {                        # Dati strutturati per analisi
                 'source_ip': '185.234.218.12',
                 'queries': 47,
-                'targets': ['dc01.company.local', 'mail.company.local', 'vpn.company.local'],
+                'targets': ['dc01.company.local'],
                 'tool_signature': 'nmap/dnsrecon'
             },
             # Spiegazione educativa (nascosta al giocatore inizialmente)

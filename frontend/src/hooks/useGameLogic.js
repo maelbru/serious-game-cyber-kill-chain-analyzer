@@ -119,6 +119,13 @@ export function useGameLogic() {
       // Backend non raggiungibile - attiva modalità offline
       setIsBackendAvailable(false)
       setError('📡 Backend non disponibile. Usando modalità offline.')
+      
+      // ✅ FIX: Riprova connessione automaticamente dopo 30 secondi
+      setTimeout(() => {
+        setIsBackendAvailable(true)
+        console.log('Retrying backend connection...')
+      }, 30000)
+      
       if (fallbackAction) {
         setTimeout(fallbackAction, 1000) // Esegui fallback dopo 1 secondo
       }
@@ -136,6 +143,12 @@ export function useGameLogic() {
    * Ottiene un nuovo log di sicurezza dal backend per iniziare un nuovo round
    */
   const fetchNewLog = useCallback(async () => {
+    // ✅ FIX: Prevenire chiamate multiple se già in caricamento
+    if (isLoading) {
+      console.warn('fetchNewLog called while already loading')
+      return
+    }
+
     // Prepara l'UI per il caricamento
     setIsLoading(true)
     setSelectedPhase(null)
@@ -194,14 +207,15 @@ export function useGameLogic() {
     } finally {
       setIsLoading(false)
     }
-  }, [score, streak, accuracy, calculateDifficulty])
+  }, [score, streak, accuracy, calculateDifficulty, isLoading]) // ✅ FIX: Aggiungi isLoading alle dipendenze
 
   /**
    * Valida la fase della Kill Chain selezionata dall'utente
    */
   const validatePhase = useCallback(async () => {
-    if (!selectedPhase) {
-      setError('Nessuna fase selezionata')
+    // ✅ FIX: Prevenire chiamate multiple durante validazione
+    if (!selectedPhase || isLoading) {
+      setError(isLoading ? 'Validazione in corso...' : 'Nessuna fase selezionata')
       return
     }
 
@@ -274,14 +288,15 @@ export function useGameLogic() {
     } finally {
       setIsLoading(false)
     }
-  }, [selectedPhase, isBackendAvailable, phasesCompleted])
+  }, [selectedPhase, isLoading, isBackendAvailable, phasesCompleted]) // ✅ FIX: Aggiungi isLoading alle dipendenze
 
   /**
    * Valida la strategia di mitigazione selezionata e calcola il punteggio
    */
   const validateMitigation = useCallback(async () => {
-    if (!selectedMitigation) {
-      setError('Nessuna mitigazione selezionata')
+    // ✅ FIX: Prevenire chiamate multiple durante validazione
+    if (!selectedMitigation || isLoading) {
+      setError(isLoading ? 'Validazione in corso...' : 'Nessuna mitigazione selezionata')
       return
     }
 
@@ -328,7 +343,7 @@ export function useGameLogic() {
     } finally {
       setIsLoading(false)
     }
-  }, [selectedMitigation, timeRemaining, difficulty, isBackendAvailable])
+  }, [selectedMitigation, timeRemaining, difficulty, isLoading, isBackendAvailable]) // ✅ FIX: Aggiungi isLoading alle dipendenze
 
   // ========================================
   // FUNZIONI DI SUPPORTO PER LA VALIDAZIONE
@@ -342,7 +357,8 @@ export function useGameLogic() {
     setStreak(0)
     setTotalAttempts(prev => {
       const newTotal = prev + 1
-      setAccuracy(Math.round((correctAttempts / newTotal) * 100))
+      // ✅ FIX: Aggiungi controllo per evitare divisione per zero
+      setAccuracy(newTotal > 0 ? Math.round((correctAttempts / newTotal) * 100) : 100)
       return newTotal
     })
 
@@ -378,7 +394,8 @@ export function useGameLogic() {
         setStreak(0)
       }
 
-      setAccuracy(Math.round((newCorrect / newTotal) * 100))
+      // ✅ FIX: Aggiungi controllo per evitare divisione per zero
+      setAccuracy(newTotal > 0 ? Math.round((newCorrect / newTotal) * 100) : 100)
       return newTotal
     })
 
@@ -458,6 +475,10 @@ export function useGameLogic() {
     // Tempo scaduto - gestisci timeout
     else if (timeRemaining === 0 && isTimerActive && gameState === GAME_STATES.PLAYING) {
       setIsTimerActive(false)
+      
+      // ✅ FIX: Reset stati del round al timeout
+      setSelectedPhase(null)
+      setSelectedMitigation(null)
 
       // Imposta feedback di timeout
       setFeedback({
@@ -473,15 +494,17 @@ export function useGameLogic() {
       setStreak(0)
       setTotalAttempts(prev => {
         const newTotal = prev + 1
-        setAccuracy(Math.round((correctAttempts / newTotal) * 100))
+        // ✅ FIX: Aggiungi controllo per evitare divisione per zero
+        setAccuracy(newTotal > 0 ? Math.round((correctAttempts / newTotal) * 100) : 100)
         return newTotal
       })
     }
 
-    // Cleanup del timeout
+    // ✅ FIX: Cleanup più robusto del timeout
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId)
+        timeoutId = null
       }
     }
   }, [timeRemaining, isTimerActive, gameState, correctAttempts])
