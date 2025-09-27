@@ -6,7 +6,7 @@ Questo progetto è una webapp educativa basata su React e Flask che integra un s
 
 ## 🚀 Caratteristiche principali
 
-- ✅ **Webapp in React** con interfaccia intuitiva e moderna
+- ✅ **Webapp in React** 
 - 🧠 **Backend Flask** con API RESTful per la gestione del gioco
 - 🎯 **Sistema di gamification** ottimizzato per l'apprendimento della cybersecurity
 - 📊 **Analisi log realistici** con feedback contestuale e coerente
