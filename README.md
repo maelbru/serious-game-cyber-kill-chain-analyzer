@@ -195,25 +195,7 @@ Algoritmo che adatta la difficoltà dinamicamente basandosi su:
 - **Awareness Training**: Migliora la consapevolezza sulle tecniche sociali
 
 ### 📱 Progressive Web App
-- Installabile su dispositivi mobili
 - Funziona completamente offline con dati di fallback
-- Supporto notifiche push per nuovi scenari
-- Cache intelligente per performance ottimali
-
-### ♿ Accessibility & UX
-- Supporto completo per screen reader
-- Navigazione keyboard-friendly
-- Tema scuro adattivo
-- Animazioni riducibili per utenti sensibili
-
-## 🔒 Sicurezza
-
-### Misure Implementate
-- **Rate Limiting** granulare per prevenire abusi
-- **Input Validation** rigorosa con Marshmallow
-- **CORS** configurato per domini specifici
-- **Security Headers** per protezione browser
-- **Session Management** sicura senza esposizione dati sensibili
 
 ---
 
