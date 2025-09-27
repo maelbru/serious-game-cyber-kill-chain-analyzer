@@ -136,30 +136,6 @@ Il gioco include diversi tipi di attacchi da analizzare:
 6. **📡 Command & Control** - Controllo remoto del sistema (include canali mascherati)
 7. **🎯 Actions on Objectives** - Raggiungimento degli obiettivi (include esfiltrazione sociale)
 
-## 🔧 Configurazione
-
-### Variabili Environment
-
-Il progetto utilizza configurazioni predefinite, ma puoi personalizzare:
-
-- **Backend Port**: Modifica in `app.py` (default: 5000)
-- **API Timeout**: Modifica in `frontend/src/utils/constants.js`
-- **Difficoltà**: Configurabile in `backend/models/game_data.py`
-- **Rate Limiting**: Configurabile in `backend/utils/rate_limiter.py`
-
-### Modalità Debug
-
-Per abilitare il debug completo:
-
-```bash
-# Backend
-export FLASK_DEBUG=1
-python app.py
-
-# Frontend
-npm run dev -- --debug
-```
-
 ## 📊 API Endpoints
 
 ### Game Management
@@ -169,8 +145,6 @@ npm run dev -- --debug
 
 ### Statistics & Info
 - `GET /api/get-phases` - Lista delle fasi Kill Chain
-- `POST /api/statistics` - Statistiche utente
-- `GET /api/leaderboard` - Classifica globale
 - `GET /api/health` - Health check del sistema
 
 ### Security Features
