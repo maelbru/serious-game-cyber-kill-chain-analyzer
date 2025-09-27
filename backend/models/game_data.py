@@ -68,10 +68,10 @@ LOGS_DATABASE = {
             'id': 'recon_1',
             # Log raw come apparirebbe in un SIEM reale
             'raw': '2025-03-15 09:23:17 [IDS] Multiple DNS queries detected from external IP 185.234.218.12 for domain controllers, mail servers, and VPN endpoints. Pattern suggests automated reconnaissance tool usage.',
-            'source': 'IDS di Rete',              # Sistema che ha generato il log
-            'severity': 'Bassa',                  # Livello di gravità dell'evento
-            'timestamp': '2025-03-15 09:23:17',  # Quando è avvenuto l'evento
-            'metadata': {                        # Dati strutturati per analisi
+            'source': 'IDS di Rete',                                # Sistema che ha generato il log
+            'severity': 'Bassa',                                    # Livello di gravità dell'evento
+            'timestamp': '2025-03-15 09:23:17',                     # Quando è avvenuto l'evento
+            'metadata': {                                           # Dati strutturati per analisi
                 'source_ip': '185.234.218.12',
                 'queries': 47,
                 'targets': ['dc01.company.local'],
@@ -98,6 +98,22 @@ LOGS_DATABASE = {
             'explanation': 'Scansione sistematica delle porte comuni indica attività di ricognizione per identificare servizi esposti.',
             'phase': 'reconnaissance',
             'indicators': ['Scansione porte', 'Enumerazione servizi', 'Mappatura superficie d\'attacco']
+        },
+        {
+            'id': 'social_recon_1',
+            'raw': '2025-03-15 14:32:45 [PHONE_LOG] Chiamata da numero sconosciuto +39-06-45782341 diretta alla reception aziendale. Caller si è spacciato per tecnico IT richiedendo informazioni sui responsabili di sistema e l\'architettura di rete. Durata chiamata: 8 minuti.',
+            'source': 'Sistema Telefonico Aziendale',
+            'severity': 'Media',
+            'timestamp': '2025-03-15 14:32:45',
+            'metadata': {
+                'caller_number': '+39-06-45782341',
+                'target_department': 'reception',
+                'duration_minutes': 8,
+                'requested_info': ['responsabili_sistema', 'architettura_rete']
+            },
+            'explanation': 'Tentativo di social engineering telefonico per raccogliere informazioni sensibili sull\'organizzazione IT aziendale durante la fase di ricognizione.',
+            'phase': 'reconnaissance',
+            'indicators': ['Chiamata da numero sconosciuto', 'Richiesta informazioni IT', 'Impersonificazione tecnico']
         }
     ],
     
@@ -119,6 +135,23 @@ LOGS_DATABASE = {
             'explanation': 'Documento dannoso con macro incorporata rappresenta la fase di armamento, in cui l\'exploit viene confezionato insieme al carico dannoso.',
             'phase': 'weaponization',
             'indicators': ['Documento con macro abilitate', 'Codice offuscato', 'Script di download']
+        },
+        {
+            'id': 'social_weapon_1',
+            'raw': '2025-03-15 16:18:22 [EMAIL_SECURITY] Email intercettata da mario.rossi@company.local con mittente falsificato hr@company.local. Oggetto: "Aggiornamento Urgente Policy Sicurezza". Allegato: PolicyUpdate_Q1_2025.exe (2.3MB). Email crafted per sembrare comunicazione HR ufficiale.',
+            'source': 'Gateway Email Security',
+            'severity': 'Alta',
+            'timestamp': '2025-03-15 16:18:22',
+            'metadata': {
+                'sender_spoofed': 'hr@company.local',
+                'recipient': 'mario.rossi@company.local',
+                'attachment': 'PolicyUpdate_Q1_2025.exe',
+                'file_size': '2.3MB',
+                'social_trigger': 'urgenza_policy'
+            },
+            'explanation': 'Weaponization attraverso social engineering: creazione di email con allegato malevolo mascherato da comunicazione HR urgente per sfruttare l\'autorità e l\'urgenza.',
+            'phase': 'weaponization',
+            'indicators': ['Mittente falsificato HR', 'Comunicazione urgente', 'Allegato eseguibile mascherato']
         }
     ],
     
@@ -140,6 +173,23 @@ LOGS_DATABASE = {
             'explanation': 'Una campagna di phishing di massa rappresenta la fase di consegna, in cui il carico dannoso raggiunge i bersagli.',
             'phase': 'delivery',
             'indicators': ['Email di phishing', 'Mittente contraffatto', 'Raccolta di credenziali']
+        },
+        {
+            'id': 'social_delivery_1',
+            'raw': '2025-03-15 11:47:33 [EMAIL_GATEWAY] Email phishing consegnata a 15 dipendenti del reparto contabilità. Mittente: ceo@comp4ny.com (typosquatting). Oggetto: "URGENTE: Bonifico immediato per acquisizione". Testo richiede trasferimento fondi con bypass delle procedure standard.',
+            'source': 'Email Gateway',
+            'severity': 'Critica',
+            'timestamp': '2025-03-15 11:47:33',
+            'metadata': {
+                'recipients_count': 15,
+                'target_department': 'contabilità',
+                'sender_domain': 'comp4ny.com',
+                'attack_type': 'CEO_fraud',
+                'requested_action': 'trasferimento_fondi'
+            },
+            'explanation': 'Consegna di attacco BEC (Business Email Compromise) mirato al reparto contabilità, utilizzando impersonificazione del CEO per ottenere trasferimenti di denaro.',
+            'phase': 'delivery',
+            'indicators': ['Typosquatting del dominio', 'Impersonificazione CEO', 'Richiesta bypass procedure']
         }
     ],
     
@@ -161,6 +211,23 @@ LOGS_DATABASE = {
             'explanation': 'L\'esecuzione di codice dannoso da un documento Word indica l\'avvenuto sfruttamento di una vulnerabilità.',
             'phase': 'exploitation',
             'indicators': ['Iniezione di processo', 'Bypass di AMSI', 'Esecuzione di shellcode']
+        },
+        {
+            'id': 'social_exploit_1',
+            'raw': '2025-03-15 13:25:17 [USER_BEHAVIOR] Utente laura.bianchi@company.local ha inserito credenziali su sito falso login-company-portal.com dopo aver ricevuto SMS di reset password. Sessione browser redirect da link abbreviato bit.ly/comp-reset. Credenziali compromesse.',
+            'source': 'Behavioral Analytics',
+            'severity': 'Alta',
+            'timestamp': '2025-03-15 13:25:17',
+            'metadata': {
+                'compromised_user': 'laura.bianchi@company.local',
+                'fake_site': 'login-company-portal.com',
+                'delivery_method': 'SMS',
+                'redirect_source': 'bit.ly/comp-reset',
+                'credentials_harvested': True
+            },
+            'explanation': 'Sfruttamento di tecniche di social engineering via SMS phishing per ottenere credenziali dell\'utente attraverso sito clone del portale aziendale.',
+            'phase': 'exploitation',
+            'indicators': ['Sito clone aziendale', 'SMS phishing', 'Credential harvesting']
         }
     ],
     
@@ -182,6 +249,23 @@ LOGS_DATABASE = {
             'explanation': 'Il malware che stabilisce persistenza tramite servizi e attività pianificate indica la fase di installazione',
             'phase': 'installation',
             'indicators': ['Creazione di servizio', 'Attività pianificata', 'Meccanismo di persistenza']
+        },
+        {
+            'id': 'social_install_1',
+            'raw': '2025-03-15 15:42:08 [ENDPOINT_PROTECTION] Rilevata installazione software non autorizzato su workstation WS-CONTA-07. Utente ha scaricato e installato "TeamViewer_Support.exe" dopo chiamata di supporto tecnico falso. Software legittimo usato per accesso remoto malevolo.',
+            'source': 'Endpoint Protection',
+            'severity': 'Alta',
+            'timestamp': '2025-03-15 15:42:08',
+            'metadata': {
+                'workstation': 'WS-CONTA-07',
+                'installed_software': 'TeamViewer_Support.exe',
+                'installation_trigger': 'falso_supporto_tecnico',
+                'software_type': 'remote_access_tool',
+                'legitimate_software': True
+            },
+            'explanation': 'Installazione di software legittimo (TeamViewer) ottenuta tramite social engineering telefonico fingendosi supporto tecnico, creando backdoor per accesso remoto.',
+            'phase': 'installation',
+            'indicators': ['Installazione software remoto', 'Chiamata supporto falso', 'Software legittimo usato male']
         }
     ],
     
@@ -203,6 +287,23 @@ LOGS_DATABASE = {
             'explanation': 'Un pattern regolare di beaconing verso un server esterno indica l\'avvenuta creazione di un canale di comando e controllo.',
             'phase': 'command_control',
             'indicators': ['Comportamento di beaconing', 'Intervalli regolari', 'Comunicazione esterna']
+        },
+        {
+            'id': 'social_c2_1',
+            'raw': '2025-03-15 17:15:29 [NETWORK_MONITORING] Stabilita connessione outbound persistente verso remote-support.tech-solutions.org:443 da workstation WS-CONTA-07. Traffico criptato su porta HTTPS ma pattern insolito. Utente continua a ricevere "istruzioni di supporto" via telefono.',
+            'source': 'Network Monitoring',
+            'severity': 'Critica',
+            'timestamp': '2025-03-15 17:15:29',
+            'metadata': {
+                'c2_server': 'remote-support.tech-solutions.org',
+                'source_workstation': 'WS-CONTA-07',
+                'connection_port': 443,
+                'traffic_encrypted': True,
+                'ongoing_phone_support': True
+            },
+            'explanation': 'Establishment di canale comando e controllo mascherato da sessione di supporto tecnico remoto, con attaccante che mantiene comunicazione vocale per istruzioni.',
+            'phase': 'command_control',
+            'indicators': ['Connessione outbound persistente', 'Traffico C2 mascherato', 'Supporto telefonico continuativo']
         }
     ],
     
@@ -224,6 +325,24 @@ LOGS_DATABASE = {
             'explanation': 'Il furto su larga scala di dati indica che l\'attaccante ha raggiunto l\'obiettivo di sottrarre informazioni sensibili.',
             'phase': 'actions_objectives',
             'indicators': ['Esfiltrazione di dati', 'File sensibili', 'Grande volume di dati']
+        },
+        {
+            'id': 'social_actions_1',
+            'raw': '2025-03-15 19:33:52 [DLP] Tentativo di esfiltrazione massiva file contabili bloccato. Utente laura.bianchi@company.local tentava upload di 847 file Excel su servizio cloud esterno dopo istruzioni ricevute via telefono da presunto "auditor esterno". Trasferimento interrotto dopo 12MB.',
+            'source': 'Data Loss Prevention',
+            'severity': 'Critica',
+            'timestamp': '2025-03-15 19:33:52',
+            'metadata': {
+                'user': 'laura.bianchi@company.local',
+                'files_count': 847,
+                'file_type': 'Excel_contabili',
+                'upload_destination': 'cloud_esterno',
+                'social_pretext': 'audit_esterno',
+                'data_transferred': '12MB'
+            },
+            'explanation': 'Tentativo di esfiltrazione dati contabili attraverso inganno sociale con impersonificazione di auditor esterno, sfruttando la fiducia nell\'autorità.',
+            'phase': 'actions_objectives',
+            'indicators': ['Esfiltrazione dati massiva', 'Impersonificazione auditor', 'Upload cloud non autorizzato']
         }
     ]
 }
@@ -249,6 +368,13 @@ MITIGATION_STRATEGIES = {
             'description': 'Monitorare e segnalare query DNS sospette',
             'icon': '🔍',
             'effectiveness': 'Alta'
+        },
+        {
+            'id': 'social_recon_mit_1',
+            'name': 'Formazione Consapevolezza Sociale',
+            'description': 'Educare staff su tecniche di social engineering e procedure di verifica dell\'identità',
+            'icon': '🧠',
+            'effectiveness': 'Alta'
         }
     ],
     
@@ -266,6 +392,13 @@ MITIGATION_STRATEGIES = {
             'name': 'Analisi in Sandbox',
             'description': 'Analizzare file sospetti in un ambiente isolato',
             'icon': '📦',
+            'effectiveness': 'Alta'
+        },
+        {
+            'id': 'social_weapon_mit_1',
+            'name': 'Verifica Mittente Multipla',
+            'description': 'Implementare controlli SPF/DKIM e training su verifica identità mittente',
+            'icon': '✅',
             'effectiveness': 'Alta'
         }
     ],
@@ -285,6 +418,13 @@ MITIGATION_STRATEGIES = {
             'description': 'Consentire l\'esecuzione solo ad applicazioni approvate',
             'icon': '✅',
             'effectiveness': 'Molto Alta'  # Efficacia massima
+        },
+        {
+            'id': 'social_delivery_mit_1',
+            'name': 'Processo Doppia Autorizzazione',
+            'description': 'Richiedere conferma telefonica per trasferimenti finanziari e modifiche critiche',
+            'icon': '🔐',
+            'effectiveness': 'Molto Alta'
         }
     ],
     
@@ -303,6 +443,13 @@ MITIGATION_STRATEGIES = {
             'description': 'Implementare soluzioni di rilevamento e risposta sugli endpoint',
             'icon': '💻',
             'effectiveness': 'Alta'
+        },
+        {
+            'id': 'social_exploit_mit_1',
+            'name': 'Autenticazione Multi-Fattore',
+            'description': 'Implementare MFA per tutti gli accessi e educare su phishing SMS/call',
+            'icon': '🔑',
+            'effectiveness': 'Molto Alta'
         }
     ],
     
@@ -320,6 +467,13 @@ MITIGATION_STRATEGIES = {
             'name': 'Monitoraggio dell\'Integrità dei File',
             'description': 'Rilevare modifiche non autorizzate ai file di sistema',
             'icon': '📁',
+            'effectiveness': 'Alta'
+        },
+        {
+            'id': 'social_install_mit_1',
+            'name': 'Controllo Installazioni Software',
+            'description': 'Bloccare installazioni non autorizzate e definire processo supporto tecnico verificato',
+            'icon': '🚫',
             'effectiveness': 'Alta'
         }
     ],
@@ -339,6 +493,13 @@ MITIGATION_STRATEGIES = {
             'description': 'Reindirizzare i domini dannosi verso un server interno',
             'icon': '🕳️',
             'effectiveness': 'Alta'
+        },
+        {
+            'id': 'social_c2_mit_1',
+            'name': 'Monitoraggio Connessioni Anomale',
+            'description': 'Detectare traffico C2 insolito e stabilire protocolli supporto tecnico autenticati',
+            'icon': '📡',
+            'effectiveness': 'Alta'
         }
     ],
     
@@ -357,6 +518,13 @@ MITIGATION_STRATEGIES = {
             'description': 'Impedire l\'esfiltrazione non autorizzata di dati',
             'icon': '🔒',
             'effectiveness': 'Alta'
+        },
+        {
+            'id': 'social_actions_mit_1',
+            'name': 'Prevenzione Perdita Dati (DLP)',
+            'description': 'Implementare DLP per trasferimenti massivi e procedure verifica per audit esterni',
+            'icon': '🛡️',
+            'effectiveness': 'Molto Alta'
         }
     ]
 }
