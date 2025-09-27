@@ -139,7 +139,7 @@ export function GameScreen({
             ======================================== */}
         <div className="log-section">
           <div className="section-header">
-            <h2>📋 Analisi dei Log di Sicurezza</h2>
+            <h2>📋 Analisi dell’Attacco</h2>
             <div className={`timer ${
               timeRemaining <= 15 ? 'critical' : 
               timeRemaining <= 30 ? 'warning' : ''

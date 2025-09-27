@@ -10,7 +10,7 @@
 
 import { KILL_CHAIN_PHASES, GAME_STATES } from '../utils/constants.js'
 
-export function WelcomeScreen({ 
+export function WelcomeScreen({
   gameState,                // Stato corrente (welcome o tutorial)
   setGameState,            // Funzione per cambiare stato
   fetchNewLog,             // Funzione per iniziare il gioco  
@@ -27,24 +27,24 @@ export function WelcomeScreen({
     return (
       <div className="tutorial-screen">
         <div className="tutorial-content">
-          
+
           {/* Header del tutorial con titolo e sottotitolo */}
           <div className="tutorial-header">
             <h1>📖 Come Giocare</h1>
-            <p>Impara a identificare e bloccare gli attacchi informatici!</p>
+            <p>Impara a riconoscere log sospetti e tecniche di social engineering per fermare gli attacchi!</p>
           </div>
 
           {/* Griglia con i passaggi del tutorial */}
           <div className="tutorial-steps">
-            
+
             {/* STEP 1: Analisi del Log */}
             <div className="tutorial-step">
               <span className="step-number">1</span>
               <div className="step-content">
-                <h3>📋 Analizza il Log</h3>
+                <h3>📋 Analizza la Situazione</h3>
                 <p>
-                  In ogni round ti verrà presentato un log di sicurezza reale. 
-                  Leggilo attentamente per identificare gli indicatori di attacco.
+                  In ogni round ti verrà presentato un log di sicurezza reale o uno scenario di social engineering.
+                  Osserva attentamente per cogliere gli indicatori di attacco o le tecniche usate dall’attaccante.
                 </p>
               </div>
             </div>
@@ -55,8 +55,8 @@ export function WelcomeScreen({
               <div className="step-content">
                 <h3>🎯 Identifica la Fase</h3>
                 <p>
-                  Basandoti sugli indicatori nel log, determina in quale delle 7 fasi 
-                  della Cyber Kill Chain si trova l'attaccante.
+                  Basandoti sugli indizi, determina in quale delle 7 fasi della Cyber Kill Chain
+                  si trova l’attaccante.
                 </p>
               </div>
             </div>
@@ -67,8 +67,8 @@ export function WelcomeScreen({
               <div className="step-content">
                 <h3>🛡️ Scegli la Contromisura</h3>
                 <p>
-                  Se identifichi correttamente la fase, dovrai scegliere la strategia 
-                  di difesa più efficace per interrompere l'attacco.
+                  Se hai identificato correttamente la fase, scegli la strategia di difesa
+                  più efficace per interrompere l’attacco.
                 </p>
               </div>
             </div>
@@ -79,22 +79,22 @@ export function WelcomeScreen({
               <div className="step-content">
                 <h3>⏱️ Tempo e Punti</h3>
                 <p>
-                  Più rapidamente rispondi correttamente, più punti guadagni! 
+                  Più rapidamente rispondi correttamente, più punti guadagni!
                   Il timer si adatta alle tue competenze crescenti.
                 </p>
               </div>
             </div>
-            
+
           </div>
 
           {/* Pulsante per tornare alla schermata principale */}
-          <button 
-            className="btn-start-game" 
+          <button
+            className="btn-start-game"
             onClick={() => setGameState(GAME_STATES.WELCOME)}
           >
-            Ho Capito! Iniziamo 🚀
+            Ho capito, iniziamo 🚀
           </button>
-          
+
         </div>
       </div>
     )
@@ -108,7 +108,7 @@ export function WelcomeScreen({
   return (
     <div className="welcome-screen">
       <div className="welcome-content">
-        
+
         {/* Logo e branding dell'applicazione */}
         <div className="logo-container">
           <div className="logo-circle">
@@ -118,10 +118,9 @@ export function WelcomeScreen({
           <div className="logo-subtitle">Analyzer</div>
         </div>
 
-        {/* Descrizione dell'applicazione educativa */}
+        {/*Descrizione dell'applicazione*/}
         <p className="welcome-description">
-          Impara a identificare e interrompere gli attacchi informatici
-          analizzando log di sicurezza reali attraverso le 7 fasi della Cyber Kill Chain
+          Analizza log reali, smaschera tecniche di social engineering e blocca gli attacchi: padroneggia le 7 fasi della Cyber Kill Chain.
         </p>
 
         {/* Avviso modalità offline se backend non disponibile */}
@@ -148,7 +147,7 @@ export function WelcomeScreen({
 
         {/* Pulsanti di azione principali */}
         <div className="welcome-buttons">
-          
+
           {/* Pulsante principale per iniziare a giocare */}
           <button
             className="btn-primary"
@@ -157,17 +156,17 @@ export function WelcomeScreen({
           >
             {isLoading ? '⏳ Caricamento...' : '🎮 Inizia a Giocare'}
           </button>
-          
+
           {/* Pulsante secondario per vedere le istruzioni */}
-          <button 
-            className="btn-secondary" 
+          <button
+            className="btn-secondary"
             onClick={() => setGameState(GAME_STATES.TUTORIAL)}
           >
             📖 Come Giocare
           </button>
-          
+
         </div>
-        
+
       </div>
     </div>
   )
