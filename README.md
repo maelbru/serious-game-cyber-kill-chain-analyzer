@@ -108,7 +108,6 @@ cd cyber-kill-chain-analyzer
 3. **🎯 Identifica la Fase**: Seleziona la fase corretta della Cyber Kill Chain
 4. **🛡️ Scegli la Mitigazione**: Se corretto, seleziona la strategia di difesa ottimale
 5. **📈 Accumula Punti**: Guadagna punti in base a velocità e precisione
-6. **🏆 Sblocca Achievement**: Raggiungi traguardi e migliora le tue competenze
 
 ### 🎭 Tipologie di Scenari
 
