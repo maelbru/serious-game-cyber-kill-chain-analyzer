@@ -6,7 +6,7 @@ Contiene tutta la logica di business del gioco educativo
 import random
 import logging
 from models.game_data import (
-    LOGS_DATABASE, 
+    LOGS_AND_SE_DATABASE,
     MITIGATION_STRATEGIES, 
     CYBER_KILL_CHAIN_PHASES,
     DIFFICULTY_CONFIG
@@ -106,8 +106,8 @@ class GameService:
             # Filtra i log disponibili basandosi sulle fasi permesse
             available_logs = []
             for phase in available_phases:
-                if phase in LOGS_DATABASE:
-                    available_logs.extend(LOGS_DATABASE[phase])
+                if phase in LOGS_AND_SE_DATABASE:
+                    available_logs.extend(LOGS_AND_SE_DATABASE[phase])
             
             # Verifica che ci siano log disponibili
             if not available_logs:

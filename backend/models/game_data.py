@@ -60,7 +60,7 @@ CYBER_KILL_CHAIN_PHASES = {
 # Organizzato per fase della kill chain con log realistici per l'educazione
 # ============================================================================
 
-LOGS_DATABASE = {
+LOGS_AND_SE_DATABASE = {
     # --- FASE 1: RECONNAISSANCE ---
     # Log che mostrano attività di ricognizione e raccolta informazioni
     'reconnaissance': [
@@ -546,7 +546,7 @@ DIFFICULTY_CONFIG = {
         'base_points': 25          # Più punti per maggiore difficoltà
     },
     'expert': {
-        'phases': list(LOGS_DATABASE.keys()),  # Tutte e 7 le fasi
+        'phases': list(LOGS_AND_SE_DATABASE.keys()),  # Tutte e 7 le fasi
         'time_limit': 30,          # Solo 30 secondi per rispondere
         'base_points': 50          # Massimo punteggio per esperti
     }
