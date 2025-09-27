@@ -2,7 +2,7 @@
 
 Questo progetto è una webapp educativa basata su React e Flask che integra un sistema di gamification per imparare la **Cyber Kill Chain**.
 
-È progettato per analizzare log di sicurezza reali e identificare le fasi degli attacchi informatici, valutando automaticamente secondo le migliori pratiche di **cybersecurity**.
+È progettato per analizzare log di sicurezza reali e **tecniche di social engineering**, identificando le fasi degli attacchi informatici e valutando automaticamente secondo le migliori pratiche di **cybersecurity**.
 
 ## 🚀 Caratteristiche principali
 
@@ -10,6 +10,8 @@ Questo progetto è una webapp educativa basata su React e Flask che integra un s
 - 🧠 **Backend Flask** con API RESTful per la gestione del gioco
 - 🎯 **Sistema di gamification** ottimizzato per l'apprendimento della cybersecurity
 - 📊 **Analisi log realistici** con feedback contestuale e coerente
+- 🎭 **Riconoscimento Social Engineering** - Identifica tecniche di ingegneria sociale
+- 📞 **Scenari telefonic/email phishing** - Casi reali di attacchi BEC e vishing
 - ⚡ **Difficoltà dinamica** che si adatta alle performance dell'utente
 - 🏆 **Sistema di achievements** con progressione e statistiche dettagliate
 - 📱 **Design responsive** compatibile con tutti i dispositivi
@@ -26,7 +28,9 @@ cyber-kill-chain-analyzer/
 │   ├── models/
 │   │   └── game_data.py          # Dati statici e configurazione
 │   ├── utils/
-│   │   └── helpers.py            # Utility functions e validazione
+│   │   ├── helpers.py            # Utility functions e validazione
+│   │   ├── rate_limiter.py       # Rate limiting configuration
+│   │   └── validators.py         # Input validation schemas
 │   ├── requirements.txt          # Dipendenze Python
 │   └── venv/                     # Virtual environment
 ├── frontend/
@@ -100,21 +104,38 @@ cd cyber-kill-chain-analyzer
 ## 🎮 Come Giocare
 
 1. **📚 Tutorial**: Inizia con il tutorial per capire le meccaniche di gioco
-2. **📋 Analizza i Log**: Leggi attentamente i log di sicurezza presentati
+2. **📋 Analizza la Situazione**: Leggi attentamente i log di sicurezza presentati o gli scenari di social engineering
 3. **🎯 Identifica la Fase**: Seleziona la fase corretta della Cyber Kill Chain
 4. **🛡️ Scegli la Mitigazione**: Se corretto, seleziona la strategia di difesa ottimale
 5. **📈 Accumula Punti**: Guadagna punti in base a velocità e precisione
 6. **🏆 Sblocca Achievement**: Raggiungi traguardi e migliora le tue competenze
 
+### 🎭 Tipologie di Scenari
+
+Il gioco include diversi tipi di attacchi da analizzare:
+
+#### **📊 Log di Sicurezza Tecnici**
+- Log di rete (IDS/IPS)
+- Log di sicurezza email
+- Log di endpoint security
+- Log di firewall e proxy
+
+#### **📞 Attacchi di Social Engineering**
+- **Vishing** (Voice Phishing): Chiamate telefoniche fraudolente
+- **Email Phishing**: Email di phishing mirate
+- **BEC** (Business Email Compromise): Impersonificazione CEO/dirigenti
+- **Pretexting**: Scenari di impersonificazione tecnica
+- **Baiting**: Esca tramite supporti rimovibili o download
+
 ### Fasi della Cyber Kill Chain
 
-1. **🔍 Reconnaissance** - Raccolta informazioni sul target
-2. **🔨 Weaponization** - Creazione del payload malevolo
-3. **📧 Delivery** - Consegna del malware al target
-4. **💥 Exploitation** - Sfruttamento delle vulnerabilità
-5. **⚙️ Installation** - Installazione del malware
-6. **📡 Command & Control** - Controllo remoto del sistema
-7. **🎯 Actions on Objectives** - Raggiungimento degli obiettivi
+1. **🔍 Reconnaissance** - Raccolta informazioni sul target (include OSINT e social engineering)
+2. **🔨 Weaponization** - Creazione del payload malevolo (include documenti con social engineering)
+3. **📧 Delivery** - Consegna del malware al target (include campagne phishing)
+4. **💥 Exploitation** - Sfruttamento delle vulnerabilità (include manipolazione umana)
+5. **⚙️ Installation** - Installazione del malware (include installazioni "assistite")
+6. **📡 Command & Control** - Controllo remoto del sistema (include canali mascherati)
+7. **🎯 Actions on Objectives** - Raggiungimento degli obiettivi (include esfiltrazione sociale)
 
 ## 🔧 Configurazione
 
@@ -125,6 +146,7 @@ Il progetto utilizza configurazioni predefinite, ma puoi personalizzare:
 - **Backend Port**: Modifica in `app.py` (default: 5000)
 - **API Timeout**: Modifica in `frontend/src/utils/constants.js`
 - **Difficoltà**: Configurabile in `backend/models/game_data.py`
+- **Rate Limiting**: Configurabile in `backend/utils/rate_limiter.py`
 
 ### Modalità Debug
 
@@ -142,7 +164,7 @@ npm run dev -- --debug
 ## 📊 API Endpoints
 
 ### Game Management
-- `POST /api/get-log` - Ottiene un nuovo log da analizzare
+- `POST /api/get-log` - Ottiene un nuovo log da analizzare (tecnico o social engineering)
 - `POST /api/validate-phase` - Valida la fase selezionata
 - `POST /api/validate-mitigation` - Valida la strategia di mitigazione
 
@@ -152,41 +174,47 @@ npm run dev -- --debug
 - `GET /api/leaderboard` - Classifica globale
 - `GET /api/health` - Health check del sistema
 
+### Security Features
+- `POST /api/reset-session` - Reset sessione utente
+- `POST /api/admin/cleanup-sessions` - Pulizia sessioni (admin)
+- `GET /api/admin/stats` - Statistiche sistema (admin)
+
 ## 🎯 Funzionalità Avanzate
 
-- **🧠 AI-Driven Difficulty**: Algoritmo che adatta la difficoltà dinamicamente
-- **📱 Progressive Web App**: Installabile su dispositivi mobili
-- **🔄 Offline Mode**: Funziona completamente offline con dati di fallback
-- **♿ Accessibility**: Supporto completo per screen reader e navigazione keyboard
-- **🎨 Dark Theme**: Design moderno con tema scuro e animazioni fluide
+### 🧠 AI-Driven Difficulty
+Algoritmo che adatta la difficoltà dinamicamente basandosi su:
+- Precisione delle risposte
+- Velocità di risposta
+- Serie di successi consecutivi
+- Tipologia di errori commessi
 
-## 📝 Roadmap
+### 🎭 Social Engineering Detection
+- **Riconoscimento Pattern**: Identifica tecniche comuni di manipolazione
+- **Analisi Psicologica**: Comprende i trigger emotivi utilizzati
+- **Contromisure Umane**: Suggerisce strategie di difesa comportamentali
+- **Awareness Training**: Migliora la consapevolezza sulle tecniche sociali
 
-- [ ] **Database persistente** per statistiche utente
-- [ ] **Modalità multiplayer** con competizioni in tempo reale
-- [ ] **Integrazione MITRE ATT&CK** framework
-- [ ] **Machine Learning** per personalizzazione log
-- [ ] **Mobile app** nativa iOS/Android
-- [ ] **Plugin browser** per analisi log live
+### 📱 Progressive Web App
+- Installabile su dispositivi mobili
+- Funziona completamente offline con dati di fallback
+- Supporto notifiche push per nuovi scenari
+- Cache intelligente per performance ottimali
 
-## 🐛 Bug Report & Feature Request
+### ♿ Accessibility & UX
+- Supporto completo per screen reader
+- Navigazione keyboard-friendly
+- Tema scuro adattivo
+- Animazioni riducibili per utenti sensibili
 
-Per segnalare bug o richiedere nuove funzionalità, apri una issue su GitHub con:
-- Descrizione dettagliata del problema/feature
-- Passaggi per riprodurre (per bug)
-- Screenshot se necessario
-- Informazioni su browser/OS
+## 🔒 Sicurezza
 
-## 📜 License
-
-Distribuito sotto licenza MIT. Vedi `LICENSE` per maggiori informazioni.
-
-## 🙏 Ringraziamenti
-
-- **Lockheed Martin** per il framework Cyber Kill Chain
-- **MITRE Corporation** per ATT&CK framework
-- **Symbiotic AI** per le linee guida di cybersecurity education
-- **React Team** per l'eccellente framework frontend
-- **Flask Community** per il micro-framework backend
+### Misure Implementate
+- **Rate Limiting** granulare per prevenire abusi
+- **Input Validation** rigorosa con Marshmallow
+- **CORS** configurato per domini specifici
+- **Security Headers** per protezione browser
+- **Session Management** sicura senza esposizione dati sensibili
 
 ---
+
+💡 **Nota**: Questo progetto è puramente educativo e tutti gli scenari di social engineering sono simulati per scopi didattici. Utilizzare queste conoscenze solo per difesa e mai per attacchi reali.
